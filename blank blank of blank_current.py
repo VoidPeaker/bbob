@@ -5,18 +5,21 @@ adjList = []
 adjProb = []
 adjFile = open('basic adj.json', "r")
 adjRam = json.load(adjFile)
+adjFile.close()
 
 nounsList = []
 nounsProb = []
 nounsFile = open('basic nouns.json', "r")
 nounsRam = json.load(nounsFile)
+nounsFile.close()
 
 ofList = []
 ofProb = []
 ofFile = open('basic of.json', "r")
 ofRam = json.load(ofFile)
+ofFile.close()
 
-savedItems = open("user saved.txt", "a")
+#savedItems = open("user saved.txt", "a+")
 
 for i in adjRam:
     adjProb.append(adjRam[i]['weight'])
@@ -193,8 +196,10 @@ while playing:
                 battle = True
         elif ans == 6:
             Screen()
+            with open("user saved.txt", "a+") as file:
+                file.write("\n" + myItem.toReadable())
+            #savedItems.write("{}".format(myItem.toReadable()))
             infoText = "Saved!"
-            savedItems.write("{}".format(myItem.toReadable()))
             uiTop()
             shopDisp(myItem.itemElements)
             uiBot(infoText)
@@ -226,16 +231,3 @@ while playing:
         elif nav == 0:
             mainMenu = True
             out = False
-
-
-
-
-
-
-
-
-
-savedItems.close()
-nounsList.close()
-adjList.close()
-ofList.close()

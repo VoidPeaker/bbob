@@ -1,0 +1,25 @@
+{
+    "heated":{
+        "hp": 5,
+        "def": 5,
+        "firstLetter": "h",
+        "set": ["basic", "baseball"],
+        "weight": 8
+    },
+    
+    "glorious": {
+        "hp": 2,
+        "def": 0,
+        "firstLetter": "g",
+        "set": ["basic", "nerd"],
+        "weight": 5
+    },
+    
+    "selfless": {
+        "hp": 5,
+        "def": 0,
+        "firstLetter": "s",
+        "set": ["basic", "jock"],
+        "weight": 1
+    }
+    }

@@ -1,0 +1,76 @@
+chestplate hp, 
+helmet
+hat
+greives
+shirt
+socks
+regalia
+earring (1)
+ring
+ring
+ring
+ring
+ring
+rock
+headphones
+catcher's mitt
+bowler shoes
+running shoes
+high heels
+keyboard
+amulet
+bauble
+broach
+pin
+dress
+shorts
+jean jacket
+gun
+knife
+sword
+rapier
+ballast
+escapement
+axe
+daggers
+mace
+flail
+stick
+gyro
+broadsword
+bug
+beetle
+ant
+sand pile
+sandwich
+allegory
+USB cable
+coffee mug
+zipper
+sticky note
+key
+portent
+topsoil
+chalice
+guitar
+bass
+keytar
+microphone
+hand saw
+piackaxe
+spoon
+fork
+chopsticks
+telephone
+wings
+abstraction
+concept
+anachronism
+bible
+gold
+pokeball
+shark
+clown
+lizard
+notebook
+almunium can

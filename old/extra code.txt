@@ -1,0 +1,10 @@
+class Item:
+    def __init__(self):
+        adj = random.choice(adjList)
+        if adj != '': adj = adj + ' '
+        noun = random.choice(nounsList)
+        of = random.choice(ofList)
+        if of != '': of = ' ' + of
+        
+        #self.output = adj + noun + of
+        self.output = ''.join([adj,noun,of])

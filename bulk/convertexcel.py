@@ -1,38 +1,48 @@
 import pandas as pd
-import json
+import json, random
 
 
 elements = ["adjectives", "nouns", "of"]
 resourcesPath = "C:/Users/fires/OneDrive/Documents/Programming/blank blank of blank/bbob/resources/"
 
+
+class jsonRepo:
+    wordJson = json
+    wordProb = []
+    wordList = []
+    def __init__(self, inputFile):
+        self.wordJson = inputFile
+        for i in self.wordJson:
+            self.wordProb.append(self.wordJson[i]['rollWeight'])
+            self.wordList.append(i)
+    
+    def getRandomWord(self):
+        word = random.choices(self.wordList, self.wordProb)
+
+        
+    # for i in nounsRepo:
+    #     nounsProb.append(nounsRepo[i]['weight'])
+    #     nounsList.append(i)
+    # for i in ofRepo:
+    #     ofProb.append(ofRepo[i]['weight'])
+    #     ofList.append(i)
+
+
+
+
+
+adjRepo = jsonRepo()
+
+# adjClass.weight(thisItem)
+
 def loadResources():
 
-    convertExcelSheetIntoJson("adjectives")
-    convertExcelSheetIntoJson("nouns")
-    convertExcelSheetIntoJson("of")
+    adjRepo = jsonRepo(convertExcelSheetIntoJson("adjectives")) #at the same time converting the excell worksheet into the json and setting the json file to be accesses from the rest of this program
+    nounsRepo = convertExcelSheetIntoJson("nouns")
+    ofRepo = convertExcelSheetIntoJson("of")
 
-
-
-    # for i in elements:
-    #     file = open(elements[i]+".json", "w")
-    #     hold = pd.read_excel(resourcesPath + "elements.xlsx",sheet_name=elements[i],index_col=0)
-    #     file.write(hold.to_json())
-    #     file.close()
     
-    # file = open("nouns.json", "w")
-    # nouns = pd.read_excel(resourcesPath + "elements.xlsx",sheet_name='nouns',index_col=0)
-    # output2 = nouns.to_json()
-    # file.write(output2)
-    # file.close()
-
-    # file = open("of.json", "w")
-    # of = pd.read_excel(resourcesPath + "elements.xlsx",sheet_name='of',index_col=0)
-    # output3 = of.to_json()
-    # file.write(output3)
-    # file.close()
-
-
-
+    
 
 
 def convertExcelSheetIntoJson(sheetName):
@@ -40,7 +50,7 @@ def convertExcelSheetIntoJson(sheetName):
     hold = pd.read_excel(resourcesPath + "elements.xlsx",sheet_name=sheetName,index_col=0)
     file.write(hold.to_json())
     file.close()
-    print("done")
+    return json.load(sheetName+".json")
 
 
 def playerStatCalc(element): #is list rn

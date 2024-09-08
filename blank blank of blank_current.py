@@ -1,39 +1,9 @@
 import random, os, json, time, math
-# from convertexcel import loadResources, resourcesPath
+from convertexcel import loadResources, resourcesPath, adjRepo
 
-# loadResources()
-# resourcesPath
+loadResources()
+resourcesPath
 
-#open documents
-adjList = []
-adjProb = []
-adjFile = open('adjectives.json', "r")
-adjRam = json.load(adjFile)
-adjFile.close()
-
-nounsList = []
-nounsProb = []
-nounsFile = open('basic nouns.json', "r")
-nounsRam = json.load(nounsFile)
-nounsFile.close()
-
-ofList = []
-ofProb = []
-ofFile = open('basic of.json', "r")
-ofRam = json.load(ofFile)
-ofFile.close()
-
-#savedItems = open("user saved.txt", "a+")
-
-for i in adjRam:
-    adjProb.append(adjRam[i]['rollWeight'])
-    adjList.append(i)
-for i in nounsRam:
-    nounsProb.append(nounsRam[i]['weight'])
-    nounsList.append(i)
-for i in ofRam:
-    ofProb.append(ofRam[i]['weight'])
-    ofList.append(i)
 
 os.system('cls')
 
@@ -91,23 +61,23 @@ class Item:
     def __init__(self):
         #initialize list
         self.itemElements = ["NULL 1","NULL 2","NULL 3"]
-        adj = random.choice(adjList)
-        noun = random.choice(nounsList)
 
 
     def roll(self, nav):
         #reroll individual values based on nav from the menu
         if nav == 1:
-            adj = random.choices(adjList, adjProb) #
+            adj = adjRepo.getRandomAdj()
             Replace(self.itemElements, 0, adj[0]) #replace function removes previous list element and adds the list element from line above
         elif nav == 2:
             noun = random.choices(nounsList, nounsProb)
+            noun = nounRepo.getRandomNoun()
             Replace(self.itemElements, 1, noun[0])
         elif nav == 3:
             of = random.choices(ofList, ofProb)
+            of = ofRepo.getRandomOf()
             Replace(self.itemElements, 2, of[0])
         elif nav == 4:
-            adj = random.choices(adjList, adjProb)
+            adj = adjRepo.getRandomAdj()
             noun = random.choices(nounsList, nounsProb)
             of = random.choices(ofList, ofProb)
             Replace(self.itemElements, 0, adj[0])

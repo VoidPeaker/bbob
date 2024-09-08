@@ -1,9 +1,13 @@
-import random, os, json, time
+import random, os, json, time, math
+# from convertexcel import loadResources, resourcesPath
+
+# loadResources()
+# resourcesPath
 
 #open documents
 adjList = []
 adjProb = []
-adjFile = open('basic adj.json', "r")
+adjFile = open('adjectives.json', "r")
 adjRam = json.load(adjFile)
 adjFile.close()
 
@@ -22,7 +26,7 @@ ofFile.close()
 #savedItems = open("user saved.txt", "a+")
 
 for i in adjRam:
-    adjProb.append(adjRam[i]['weight'])
+    adjProb.append(adjRam[i]['rollWeight'])
     adjList.append(i)
 for i in nounsRam:
     nounsProb.append(nounsRam[i]['weight'])
@@ -55,25 +59,32 @@ def allitBonus(self):
     return adjRam['{}'.format(self[0])]['firstLetter'] == nounsRam['{}'.format(self[1])]['firstLetter'] == ofRam['{}'.format(self[2])]['firstLetter']
 
 def playerStatCalc(self): #is list rn
-    adjHp = adjRam['{}'.format(self[0])]['hp']
-    nounsHp = nounsRam['{}'.format(self[1])]['hp']
-    ofHp = ofRam['{}'.format(self[2])]['hp']
+    #attack
+    adjAtt = adjRam['{}'.format(self[0])]['att']
+    nounsAtt = nounsRam['{}'.format(self[1])]['att']
+    ofAtt = ofRam['{}'.format(self[2])]['att']
+    #defence
     adjDef = adjRam['{}'.format(self[0])]['def']
     nounsDef = nounsRam['{}'.format(self[1])]['def']
     ofDef = ofRam['{}'.format(self[2])]['def']
+    #speed
+    adjSpd = adjRam['{}'.format(self[0])]['speed']
+    nounsSpd = nounsRam['{}'.format(self[1])]['speed']
+    ofSpd = ofRam['{}'.format(self[2])]['speed']
+
     a = 1 #alliteration bonus
     if allitBonus(self):
         a = 2
-    baseHp = 1
+    baseAtt = 5
     baseDef = 1
     asb = 1 #adjective set bonus
     nsb = 1 #noun set bonus
     osb = 1 #of set bonus
 
 
-    hp = a*((asb*adjHp) + (nsb*nounsHp) + (osb*ofHp) + baseHp)
+    att = a*((asb*adjAtt) + (nsb*nounsAtt) + (osb*ofAtt) + baseAtt)
     defence = a*((asb*adjDef) + (nsb*nounsDef) + (osb*ofDef) + baseDef)
-    print("hp:{} def:{} ".format(hp, defence))
+    print("att:{} def:{} ".format(att, defence))
 
 
 class Item:
@@ -84,18 +95,18 @@ class Item:
         noun = random.choice(nounsList)
 
 
-    def roll(self, ans):
-        #reroll individual values based on ans from the menu
-        if ans == 1:
+    def roll(self, nav):
+        #reroll individual values based on nav from the menu
+        if nav == 1:
             adj = random.choices(adjList, adjProb) #
             Replace(self.itemElements, 0, adj[0]) #replace function removes previous list element and adds the list element from line above
-        elif ans == 2:
+        elif nav == 2:
             noun = random.choices(nounsList, nounsProb)
             Replace(self.itemElements, 1, noun[0])
-        elif ans == 3:
+        elif nav == 3:
             of = random.choices(ofList, ofProb)
             Replace(self.itemElements, 2, of[0])
-        elif ans == 4:
+        elif nav == 4:
             adj = random.choices(adjList, adjProb)
             noun = random.choices(nounsList, nounsProb)
             of = random.choices(ofList, ofProb)
@@ -110,12 +121,47 @@ class Item:
         s = self.itemElements[0] + " " + self.itemElements[1] + " " + self.itemElements[2]
         return s
 
+class Enemy:
+    def __init__(self):
+        pass
+
+    def makeEnemy(self, level):
+        baseHp = 5
+        baseDef = 5
+        baseAtt = 1
+        firstName = ['charles', 'david', 'glorbo', 'greepus', 'grabon', 'flub', 'grub', 'graham', 'greebs', 'bunkle', 'bonkle', 'bunkis', 'nunkis', 'charles']    
+        lastName = ['the strange', 'beepy, the eepy deepy zeepy' , 'the younger', 'the older', 'greepus', 'the sleepy', '', '', '', '', '', '', 'smith', 'agnew']
+        self.name = random.choice(firstName) + " " + random.choice(lastName)
+        self.hp = baseHp + len(self.name) + math.ceil(level*1.5)
+        self.defence = baseDef + (level * random.choice(range(2,4)))
+        self.att = baseAtt + level + (level * random.choice(range(2,4)))
+
+    def damage(self, itemDamage):
+        if itemDamage - self.defence > 0:
+            self.hp = self.hp - (itemDamage - self.defence)
+        else:
+            self.hp = self.hp - 1
+
+class Player:
+
+    def __init__(self):
+        self.itemDamage = 5
+        self.playerHp = 15
+        self.playerDefence = 5
+
+
+    def damagePlayer(self, enemyDamage):
+        if enemyDamage - self.playerDefence > 0:
+            self.playerHp = self.playerHp - (enemyDamage - self.playerDefence)
+
 myItem = Item()
 myItem.roll(4)
+newenemy = Enemy()
+newenemy.makeEnemy(1)
+pc = Player()
 
 def Screen():
     os.system('cls')
-
 def uiTop():
     print("gold: " + str(money))
     print(myItem.toReadable())
@@ -135,15 +181,10 @@ def menu1():
           """)
 
 
-
-
-
-
 while playing:
     while mainMenu:
         Screen()
-        nav = 0
-        ans=0
+        nav=0
         uiTop()
         menu1()
         uiBot()
@@ -158,7 +199,6 @@ while playing:
             out = True
             mainMenu = False
 
-
     while shop:
         Screen()
         nav = 0
@@ -166,22 +206,23 @@ while playing:
         uiTop()
         shopDisp(myItem.itemElements)
         uiBot(infoText)
-        ans = int(input())
-        if (ans == 1 or ans == 2 or ans == 3) and (money >= 3): #money-3 == 0?
+        nav = int(input())
+        if (nav == 1 or nav == 2 or nav == 3) and (money >= 3): #money-3 == 0?
             money -= 3
             Screen()
-            myItem.roll(ans)
+            myItem.roll(nav)
 
-        elif (ans == 4) and (money >= 1):
+        elif (nav == 4) and (money >= 1):
             money = money - 1
             Screen()
-            myItem.roll(ans)
+            myItem.roll(nav)
 
-        elif (ans == 1 or ans == 2 or ans == 3 or ans == 4) and (money - 3 <= 0):
+        elif (nav == 1 or nav == 2 or nav == 3 or nav == 4) and (money - 3 <= 0):
             Screen()
-            infoText = "not enough money!"
+            infoText = "not enough money!\n enter to continue"
+            input()
 
-        elif ans == 5:
+        elif nav == 5:
             Screen()
             infoText = "1. main menu\n2. battle screen"
             uiTop()
@@ -194,7 +235,7 @@ while playing:
             elif nav == 2:
                 shop = False
                 battle = True
-        elif ans == 6:
+        elif nav == 6:
             Screen()
             with open("user saved.txt", "a+") as file:
                 file.write("\n" + myItem.toReadable())
@@ -203,23 +244,64 @@ while playing:
             uiTop()
             shopDisp(myItem.itemElements)
             uiBot(infoText)
-
-            
-        
-               
+            input()
 
     while battle:
-        nav = 0
-        uiTop()
-        print("this is the battle\n1. go back")
-        uiBot()
+        i = 1
+        combo = 0
+        newenemy.makeEnemy(i)
+
         nav = int(input())
         if nav == 1:
+            attack = True
+            print('{} attacks!!!!!! he has {} health and {} defence!\nenter to attack!'.format(newenemy.name, newenemy.hp, newenemy.defence))
+        elif nav == 2:
             battle = False
-            mainMenu = True
-        os.system('cls')
-        
+            shop = True
+        while attack:
+            if newenemy.hp - pc.itemDamage <= 0:
+                os.system('cls')
+                print("enemies beaten: {}\nitem attack: {}\ncurrent health: {}".format(combo, pc.itemDamage, pc.playerHp)) 
+                print("you won!")
+                input()
+                newenemy.makeEnemy(i)
+                print('uh oh!\n{} attacks!!!!!! he has {} health and {} defence!\nenter to attack!'.format(newenemy.name, newenemy.hp, newenemy.defence))
+                combo +=1
+                i += 1
+                pc.itemDamage += 1
+                input()
+            
+            elif pc.playerHp - newenemy.att <= 0:
+                os.system('cls')
+                print('you died!')
+                input()
+                battle = False
+                Shop = True
 
+            
+            else:
+                os.system('cls')
+                print("enemies beaten: {}\nitem attack: {}\ncurrent health: {}".format(combo, pc.itemDamage, pc.playerHp))
+                newenemy.damage(pc.itemDamage)
+                pc.damagePlayer(newenemy.att)
+                print("{}'s current health is {} with defence {}".format(newenemy.name, newenemy.hp, newenemy.defence))
+                input()
+                
+
+
+
+
+
+            # nav = 0
+            # uiTop()
+            # print("this is the battle\n1. go back")
+            # uiBot()
+            # nav = int(input())
+            # if nav == 1:
+            #     battle = False
+            #     mainMenu = True
+            # os.system('cls')
+            
     while out:
         nav = 0
         uiTop()

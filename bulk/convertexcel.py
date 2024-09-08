@@ -1,23 +1,26 @@
 import pandas as pd
-import json, random
+import json, random, os
 
 
 elements = ["adjectives", "nouns", "of"]
-resourcesPath = "C:/Users/fires/OneDrive/Documents/Programming/blank blank of blank/bbob/resources/"
+#resourcesPath = "C:/Users/fires/OneDrive/Documents/Programming/blank blank of blank/bbob/resources/"
+resourcesPath = "./bbob/resources/"
 
 
-class jsonRepo:
-    wordJson = json
-    wordProb = []
-    wordList = []
-    def __init__(self, inputFile):
-        self.wordJson = inputFile
-        for i in self.wordJson:
-            self.wordProb.append(self.wordJson[i]['rollWeight'])
-            self.wordList.append(i)
+# class jsonRepo:
+#     wordJson = json
+#     wordProb = []
+#     wordList = []
+
+#     def __init__(self, inputFile):
+#         self.wordJson = inputFile
+#         i = 0
+#         for i in self.wordJson:
+#             self.wordProb.append(self.wordJson[int(i)]['rollWeight'])
+#             self.wordList.append(i)
     
-    def getRandomWord(self):
-        word = random.choices(self.wordList, self.wordProb)
+#     def getRandomWord(self):
+#         word = random.choices(self.wordList, self.wordProb)
 
         
     # for i in nounsRepo:
@@ -31,13 +34,13 @@ class jsonRepo:
 
 
 
-adjRepo = jsonRepo()
+#adjRepo = jsonRepo("adjectives")
 
 # adjClass.weight(thisItem)
 
 def loadResources():
 
-    adjRepo = jsonRepo(convertExcelSheetIntoJson("adjectives")) #at the same time converting the excell worksheet into the json and setting the json file to be accesses from the rest of this program
+    adjRepo = convertExcelSheetIntoJson("adjectives") #at the same time converting the excell worksheet into the json and setting the json file to be accesses from the rest of this program
     nounsRepo = convertExcelSheetIntoJson("nouns")
     ofRepo = convertExcelSheetIntoJson("of")
 
@@ -52,7 +55,10 @@ def convertExcelSheetIntoJson(sheetName):
     file.close()
     return json.load(sheetName+".json")
 
+#convertExcelSheetIntoJson("adjectives")
 
+
+"""
 def playerStatCalc(element): #is list rn
     #attack
     adjAtt = adjRam['{}'.format(element[0])]['att']
@@ -80,3 +86,4 @@ def playerStatCalc(element): #is list rn
     att = a*((asb*adjAtt) + (nsb*nounsAtt) + (osb*ofAtt) + baseAtt)
     defence = a*((asb*adjDef) + (nsb*nounsDef) + (osb*ofDef) + baseDef)
     print("att:{} def:{} ".format(att, defence))
+"""

@@ -1,9 +1,5 @@
 import random, os, json, time, math
-from convertexcel import loadResources, resourcesPath, adjRepo
-
-loadResources()
-resourcesPath
-
+from convertexcel import playerStatCalc, getInfo
 
 os.system('cls')
 
@@ -21,40 +17,10 @@ def Replace(list, i, string):
     list.insert(i, "{}".format(string))
     return list
 
-def shopDisp(items):
+def shopDisp(item):
     w = 20
-    print(items[0].ljust(w), items[1].ljust(w), items[2].ljust(w), "\n\n" + '1 [3g]'.ljust(w),'2 [3g]'.ljust(w),'3 [3g]'.ljust(w), '\n' '|_______________________________________________| 4 [1g]')
+    print(item[0].ljust(w), item[1].ljust(w), item[2].ljust(w), "\n\n" + '1 [3g]'.ljust(w),'2 [3g]'.ljust(w),'3 [3g]'.ljust(w), '\n' '|_______________________________________________| 4 [1g]')
 
-def allitBonus(self):
-    return adjRam['{}'.format(self[0])]['firstLetter'] == nounsRam['{}'.format(self[1])]['firstLetter'] == ofRam['{}'.format(self[2])]['firstLetter']
-
-def playerStatCalc(self): #is list rn
-    #attack
-    adjAtt = adjRam['{}'.format(self[0])]['att']
-    nounsAtt = nounsRam['{}'.format(self[1])]['att']
-    ofAtt = ofRam['{}'.format(self[2])]['att']
-    #defence
-    adjDef = adjRam['{}'.format(self[0])]['def']
-    nounsDef = nounsRam['{}'.format(self[1])]['def']
-    ofDef = ofRam['{}'.format(self[2])]['def']
-    #speed
-    adjSpd = adjRam['{}'.format(self[0])]['speed']
-    nounsSpd = nounsRam['{}'.format(self[1])]['speed']
-    ofSpd = ofRam['{}'.format(self[2])]['speed']
-
-    a = 1 #alliteration bonus
-    if allitBonus(self):
-        a = 2
-    baseAtt = 5
-    baseDef = 1
-    asb = 1 #adjective set bonus
-    nsb = 1 #noun set bonus
-    osb = 1 #of set bonus
-
-
-    att = a*((asb*adjAtt) + (nsb*nounsAtt) + (osb*ofAtt) + baseAtt)
-    defence = a*((asb*adjDef) + (nsb*nounsDef) + (osb*ofDef) + baseDef)
-    print("att:{} def:{} ".format(att, defence))
 
 
 class Item:
@@ -62,11 +28,10 @@ class Item:
         #initialize list
         self.itemElements = ["NULL 1","NULL 2","NULL 3"]
 
-
     def roll(self, nav):
         #reroll individual values based on nav from the menu
         if nav == 1:
-            adj = adjRepo.getRandomAdj()
+            adj = adjJson.getRandomAdj()
             Replace(self.itemElements, 0, adj[0]) #replace function removes previous list element and adds the list element from line above
         elif nav == 2:
             noun = random.choices(nounsList, nounsProb)
@@ -77,7 +42,7 @@ class Item:
             of = ofRepo.getRandomOf()
             Replace(self.itemElements, 2, of[0])
         elif nav == 4:
-            adj = adjRepo.getRandomAdj()
+            adj = adjJson.getRandomAdj()
             noun = random.choices(nounsList, nounsProb)
             of = random.choices(ofList, ofProb)
             Replace(self.itemElements, 0, adj[0])
@@ -150,7 +115,7 @@ def menu1():
 3. quit
           """)
 
-
+#main playing loop
 while playing:
     while mainMenu:
         Screen()
@@ -256,21 +221,6 @@ while playing:
                 pc.damagePlayer(newenemy.att)
                 print("{}'s current health is {} with defence {}".format(newenemy.name, newenemy.hp, newenemy.defence))
                 input()
-                
-
-
-
-
-
-            # nav = 0
-            # uiTop()
-            # print("this is the battle\n1. go back")
-            # uiBot()
-            # nav = int(input())
-            # if nav == 1:
-            #     battle = False
-            #     mainMenu = True
-            # os.system('cls')
             
     while out:
         nav = 0

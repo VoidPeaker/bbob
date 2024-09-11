@@ -1,5 +1,5 @@
 import random, os, json, time, math
-from convertexcel import playerStatCalc, getInfo
+from convertexcel import playerStatCalc, Item
 
 os.system('cls')
 
@@ -12,10 +12,7 @@ out = False
 money = 100000000
 nav = 0
 
-def Replace(list, i, string):
-    list.pop(i)
-    list.insert(i, "{}".format(string))
-    return list
+
 
 def shopDisp(item):
     w = 20
@@ -23,44 +20,8 @@ def shopDisp(item):
 
 
 
-class Item:
-    def __init__(self):
-        #initialize list
-        self.itemElements = ["NULL 1","NULL 2","NULL 3"]
-
-    def roll(self, nav):
-        #reroll individual values based on nav from the menu
-        if nav == 1:
-            adj = adjJson.getRandomAdj()
-            Replace(self.itemElements, 0, adj[0]) #replace function removes previous list element and adds the list element from line above
-        elif nav == 2:
-            noun = random.choices(nounsList, nounsProb)
-            noun = nounRepo.getRandomNoun()
-            Replace(self.itemElements, 1, noun[0])
-        elif nav == 3:
-            of = random.choices(ofList, ofProb)
-            of = ofRepo.getRandomOf()
-            Replace(self.itemElements, 2, of[0])
-        elif nav == 4:
-            adj = adjJson.getRandomAdj()
-            noun = random.choices(nounsList, nounsProb)
-            of = random.choices(ofList, ofProb)
-            Replace(self.itemElements, 0, adj[0])
-            Replace(self.itemElements, 1, noun[0])
-            Replace(self.itemElements, 2, of[0])          
-        else:
-            print("bozo")
-
-
-    def toReadable(self):
-        s = self.itemElements[0] + " " + self.itemElements[1] + " " + self.itemElements[2]
-        return s
-
 class Enemy:
-    def __init__(self):
-        pass
-
-    def makeEnemy(self, level):
+    def __init__(self, level):
         baseHp = 5
         baseDef = 5
         baseAtt = 1
@@ -91,19 +52,19 @@ class Player:
 
 myItem = Item()
 myItem.roll(4)
-newenemy = Enemy()
-newenemy.makeEnemy(1)
+newenemy = Enemy(1)
 pc = Player()
 
 def Screen():
     os.system('cls')
+
 def uiTop():
     print("gold: " + str(money))
     print(myItem.toReadable())
-    if allitBonus(myItem.itemElements):
+    if allitBonus(myItem.list):
         print('alliteration bonus!!')
     #print(playing, mainMenu, shop, battle, nav)
-    playerStatCalc(myItem.itemElements)
+    playerStatCalc(myItem.list)
     print("\n---------------------------------------------\n")
 def uiBot(thisText = "> "):
     print("\n---------------------------------------------\n")
@@ -114,6 +75,7 @@ def menu1():
 2. battle
 3. quit
           """)
+    
 
 #main playing loop
 while playing:
@@ -139,7 +101,7 @@ while playing:
         nav = 0
         infoText = "Please make a selection to re-roll that aspect!\n5 to go back to the main menu\n6 to save current item to hall of fame"
         uiTop()
-        shopDisp(myItem.itemElements)
+        shopDisp(myItem.list)
         uiBot(infoText)
         nav = int(input())
         if (nav == 1 or nav == 2 or nav == 3) and (money >= 3): #money-3 == 0?
@@ -161,7 +123,7 @@ while playing:
             Screen()
             infoText = "1. main menu\n2. battle screen"
             uiTop()
-            shopDisp(myItem.itemElements)
+            shopDisp(myItem.list)
             uiBot(infoText)
             nav = int(input())
             if nav == 1:
@@ -177,14 +139,14 @@ while playing:
             #savedItems.write("{}".format(myItem.toReadable()))
             infoText = "Saved!"
             uiTop()
-            shopDisp(myItem.itemElements)
+            shopDisp(myItem.list)
             uiBot(infoText)
             input()
 
     while battle:
         i = 1
         combo = 0
-        newenemy.makeEnemy(i)
+        newenemy = Enemy(i)
 
         nav = int(input())
         if nav == 1:
@@ -199,7 +161,7 @@ while playing:
                 print("enemies beaten: {}\nitem attack: {}\ncurrent health: {}".format(combo, pc.itemDamage, pc.playerHp)) 
                 print("you won!")
                 input()
-                newenemy.makeEnemy(i)
+                newenemy = Enemy(i)
                 print('uh oh!\n{} attacks!!!!!! he has {} health and {} defence!\nenter to attack!'.format(newenemy.name, newenemy.hp, newenemy.defence))
                 combo +=1
                 i += 1

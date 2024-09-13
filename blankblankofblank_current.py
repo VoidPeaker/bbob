@@ -1,5 +1,5 @@
 import random, os, json, time, math
-from convertexcel import playerStatCalc, Item
+from convertexcel import playerStatCalc, Item, allitBonus
 
 os.system('cls')
 

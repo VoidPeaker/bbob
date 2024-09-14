@@ -79,7 +79,6 @@ class Item:
         s = self.list[0] + " " + self.list[1] + " " + self.list[2]
         return s
 
-exItem = Item()
 
 
         

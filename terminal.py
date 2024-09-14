@@ -16,11 +16,7 @@ font = pygame.font.SysFont("lucidaconsole", fontSize)
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 
-# text for line 1
-text  = "this is a sample line of text"
-text = text.ljust(80, " ")
-
-# text for all lines
+# declaring the list that will contain the visible lines of text
 numLines = 24
 lineWidth = 80
 visibleText = []
@@ -44,6 +40,8 @@ printToTerminal("lorem ipsum dolor sit amet")
 printToTerminal("mooonday leeft me borken")
 printToTerminal("tuesday i was through with ohpin")
 printToTerminal("wednesday I forget the fuckin lyrics")
+clearTerminal()
+printToTerminal("test?")
 
 
 while running:
@@ -55,6 +53,9 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
+
+    
+
 
     # RENDER YOUR GAME HERE
     height = 5

@@ -35,6 +35,11 @@ def printToTerminal(newLine):
     visibleText.pop(0) # remove the oldest line
     visibleText.append(newLine.ljust(80))
 
+def clearTerminal():
+    visibleText = []
+    for i in range(numLines):
+        visibleText.append("".ljust(lineWidth))
+
 printToTerminal("test one")
 printToTerminal("test two")
 printToTerminal("test three")

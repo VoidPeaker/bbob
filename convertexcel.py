@@ -43,7 +43,7 @@ for i in ofJson:
 class Item:
     def __init__(self):
         #initialize list
-        self.list = ["fearful"]
+        self.list = ["NULL", "NULL", "NULL"]
 
     def getInfo(self, word, attr): #self = list that contains item elements, word = which of the three words, attr = what attribute to return from the json file
         if word == "adj":
@@ -78,10 +78,15 @@ class Item:
     def toReadable(self):
         s = self.list[0] + " " + self.list[1] + " " + self.list[2]
         return s
+    
+    def getList(self):
+        return self.list
 
 
+myItem = Item()
+myItem.roll(4)
 
-        
+
 
     
 def allitBonus(item):
@@ -116,4 +121,4 @@ def playerStatCalc(item): #is list rn
     speed = a*((asb*adjSpd) + (nsb*nounsSpd) + (osb*ofSpd)+1)
     return att, defence, speed
 
-print(playerStatCalc(exItem))
+#print(playerStatCalc(myItem))

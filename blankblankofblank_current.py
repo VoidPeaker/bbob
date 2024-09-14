@@ -1,5 +1,5 @@
 import random, os, json, time, math
-from convertexcel import playerStatCalc, Item, allitBonus
+from convertexcel import playerStatCalc, Item, allitBonus, myItem
 
 os.system('cls')
 
@@ -50,8 +50,7 @@ class Player:
         if enemyDamage - self.playerDefence > 0:
             self.playerHp = self.playerHp - (enemyDamage - self.playerDefence)
 
-myItem = Item()
-myItem.roll(4)
+
 newenemy = Enemy(1)
 pc = Player()
 
@@ -60,11 +59,11 @@ def Screen():
 
 def uiTop():
     print("gold: " + str(money))
-    print(myItem.toReadable())
-    if allitBonus(myItem.list):
+    print(myItem.getList())
+    if allitBonus(myItem):
         print('alliteration bonus!!')
     #print(playing, mainMenu, shop, battle, nav)
-    playerStatCalc(myItem.list)
+    playerStatCalc(myItem)
     print("\n---------------------------------------------\n")
 def uiBot(thisText = "> "):
     print("\n---------------------------------------------\n")
@@ -101,7 +100,7 @@ while playing:
         nav = 0
         infoText = "Please make a selection to re-roll that aspect!\n5 to go back to the main menu\n6 to save current item to hall of fame"
         uiTop()
-        shopDisp(myItem.list)
+        shopDisp(myItem.getList())
         uiBot(infoText)
         nav = int(input())
         if (nav == 1 or nav == 2 or nav == 3) and (money >= 3): #money-3 == 0?
@@ -123,7 +122,7 @@ while playing:
             Screen()
             infoText = "1. main menu\n2. battle screen"
             uiTop()
-            shopDisp(myItem.list)
+            shopDisp(myItem.getList())
             uiBot(infoText)
             nav = int(input())
             if nav == 1:
@@ -139,7 +138,7 @@ while playing:
             #savedItems.write("{}".format(myItem.toReadable()))
             infoText = "Saved!"
             uiTop()
-            shopDisp(myItem.list)
+            shopDisp(myItem.getList())
             uiBot(infoText)
             input()
 

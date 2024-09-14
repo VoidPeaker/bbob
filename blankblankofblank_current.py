@@ -159,7 +159,8 @@ while playing:
                     nav = currentPosition + 1
 
         
-        print("nav = " + str(nav))
+        if nav != 0:
+            print("nav = " + str(nav))
         print("currentPosition = " + str(currentPosition))
 
         # if it's 1, 2, or 3, we move to a different screen
@@ -224,6 +225,7 @@ while playing:
         i = 1
         combo = 0
         newenemy = Enemy(i)
+        nav = 0
 
         #nav = int(input())
         if nav == 1:
@@ -262,7 +264,7 @@ while playing:
                 input()
             
     if out:
-        nav = 0
+        nav = 1
         uiTop()
         printToTerminal('are you sure?')
         uiBot()

@@ -46,13 +46,15 @@ def clearTerminal():
         visibleText.append("".ljust(lineWidth))
 
 
-
-
-
 def shopDisp(item):
     w = 20
-    printToTerminal(item[0].ljust(w) + item[1].ljust(w) + item[2].ljust(w) + "\n\n" + '1 [3g]'.ljust(w) + '2 [3g]'.ljust(w) + '3 [3g]'.ljust(w) + '\n' '|_______________________________________________| 4 [1g]')
-
+    printToTerminal('')
+    printToTerminal(item[0].ljust(w) + item[1].ljust(w) + item[2].ljust(w))
+    printToTerminal('')
+    printToTerminal('')
+    printToTerminal('1 [3g]'.ljust(w) + '2 [3g]'.ljust(w) + '3 [3g]'.ljust(w))
+    printToTerminal('|_______________________________________________| 4 [1g]')
+    printToTerminal('')
 
 
 class Enemy:

@@ -49,27 +49,27 @@ import os, json
 # input("choose number ")
 
 #for n in items:
-def Screen():
-    os.system('cls')
+# def Screen():
+#     os.system('cls')
 
-def Replace(list, i, string):
-    list.pop(i)
-    list.insert(i, "{}".format(string))
-    return list
+# def Replace(list, i, string):
+#     list.pop(i)
+#     list.insert(i, "{}".format(string))
+#     return list
 
-nounList = []
-nounFile = open('basic nouns.json', "r")
-nounRam = json.load(nounFile)
-# print(nounRam["hat"])
-# for i in nounRam:
-#     print(i, nounRam[i]['weight'])
-#     #nounList.append(i)
+# nounList = []
+# nounFile = open('basic nouns.json', "r")
+# nounRam = json.load(nounFile)
+# # print(nounRam["hat"])
+# # for i in nounRam:
+# #     print(i, nounRam[i]['weight'])
+# #     #nounList.append(i)
 
-def roll():
+# def roll():
     
-    pass
+#     pass
 
-print(nounList)
+# print(nounList)
 
 
 
@@ -117,3 +117,17 @@ print(nounList)
 
 
 
+newList = ['hi', 'im', 'paul']
+
+def funk(index):
+    adj = index[0]
+    noun = index[1]
+    of = index[2]
+    if index[0] == adj:
+        return index
+    elif index[1] == noun:
+        return index
+    elif index[2] == of:
+        return index
+    
+print(funk(newList[2]))

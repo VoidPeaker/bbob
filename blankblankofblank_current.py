@@ -197,9 +197,6 @@ while playing:
                     nav = currentPosition + 1
 
         
-        if nav != 0:
-            print("nav = " + str(nav))
-        print("currentPosition = " + str(currentPosition))
 
         # if it's 1, 2, or 3, we move to a different screen
         if nav == 1:
@@ -216,7 +213,7 @@ while playing:
             mainMenu = False
             nav = 0
 
-    if shop:
+    elif shop:
         clearTerminal()
 
         infoText = "Please make a selection to re-roll that aspect!\n5 to go back to the main menu\n6 to save current item to hall of fame"
@@ -237,11 +234,13 @@ while playing:
             money -= 3
             clearTerminal()
             myItem.roll(nav)
+            nav = 0
 
         elif (nav == 4) and (money >= 1):
             money = money - 1
             clearTerminal()
             myItem.roll(nav)
+            nav = 0
 
         elif (nav == 1 or nav == 2 or nav == 3 or nav == 4) and (money - 3 <= 0):
             clearTerminal()
@@ -252,6 +251,7 @@ while playing:
             mainMenu = True
             shop = False
             currentPosition = 0
+            nav = 0
 
         elif nav == 6:
             clearTerminal()
@@ -266,7 +266,7 @@ while playing:
 
 
 
-    if battle:
+    elif battle:
         i = 1
         combo = 0
         newenemy = Enemy(i)
@@ -308,7 +308,7 @@ while playing:
                 printToTerminal("{}'s current health is {} with defence {}".format(newenemy.name, newenemy.hp, newenemy.defence))
                 input()
             
-    if out:
+    elif out:
         nav = 1
         uiTop()
         printToTerminal('are you sure?')

@@ -1,8 +1,7 @@
 import os, time
 i=0
 while True:
-    print("hi")
-    while i < 50:
+    while i < 5:
         print("++++++")
         time.sleep(.1)
         os.system('cls')
@@ -10,4 +9,7 @@ while True:
         time.sleep(.1)
         os.system('cls')
         i += 1
+
+    input()
+    
 

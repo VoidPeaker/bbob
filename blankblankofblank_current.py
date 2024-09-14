@@ -1,4 +1,4 @@
-import random, os, json, time, math
+import random, os, json, time, math, pygame
 from convertexcel import playerStatCalc, Item, allitBonus, myItem
 
 os.system('cls')
@@ -11,6 +11,38 @@ battle = False
 out = False
 money = 100000000
 nav = 0
+
+# pygame setup
+pygame.init()
+screen = pygame.display.set_mode((1210, 633))
+clock = pygame.time.Clock()
+running = True
+
+# initialize font
+fontSize = 25
+font = pygame.font.SysFont("lucidaconsole", fontSize)
+
+
+# set colors
+BLACK = (0, 0, 0)
+GREEN = (0, 255, 0)
+
+# declaring the list that will contain the visible lines of text
+numLines = 24
+lineWidth = 80
+visibleText = []
+for i in range(numLines):
+    visibleText.append("".ljust(lineWidth))
+
+# function to print a line to the terminal window
+def printToTerminal(newLine):
+    visibleText.pop(0) # remove the oldest line
+    visibleText.append(newLine.ljust(80))
+
+def clearTerminal():
+    visibleText = []
+    for i in range(numLines):
+        visibleText.append("".ljust(lineWidth))
 
 
 
@@ -78,6 +110,13 @@ def menu1():
 
 #main playing loop
 while playing:
+
+    # poll for events
+    # pygame.QUIT event means the user clicked X to close your window
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            playing = False
+
     while mainMenu:
         Screen()
         nav=0

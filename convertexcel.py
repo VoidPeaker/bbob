@@ -118,7 +118,7 @@ def playerStatCalc(item): #is list rn
 
     att = a*((asb*adjAtt) + (nsb*nounsAtt) + (osb*ofAtt) + baseAtt)
     defence = a*((asb*adjDef) + (nsb*nounsDef) + (osb*ofDef) + baseDef)
-    speed = a*((asb*adjSpd) + (nsb*nounsSpd) + (osb*ofSpd)+1)
+    speed = a*(int((asb*adjSpd)) + int((nsb*nounsSpd)) + (osb*ofSpd)+1)
     return att, defence, speed
 
 #print(playerStatCalc(myItem))

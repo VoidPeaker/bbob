@@ -46,15 +46,53 @@ def clearTerminal():
         visibleText.append("".ljust(lineWidth))
 
 
-def shopDisp(item):
+def shopDisp(item, currentPosition):
     w = 20
-    printToTerminal('')
-    printToTerminal(item[0].ljust(w) + item[1].ljust(w) + item[2].ljust(w))
-    printToTerminal('')
-    printToTerminal('')
-    printToTerminal('1 [3g]'.ljust(w) + '2 [3g]'.ljust(w) + '3 [3g]'.ljust(w))
-    printToTerminal('|_______________________________________________| 4 [1g]')
-    printToTerminal('')
+    if currentPosition == 0:
+        printToTerminal('')
+        printToTerminal(item[0].ljust(w) + item[1].ljust(w) + item[2].ljust(w))
+        printToTerminal('')
+        printToTerminal('')
+        printToTerminal('[1] 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
+        printToTerminal('|_______________________________________________| 4 1g')
+        printToTerminal('')
+        printToTerminal('5 to Main Menu')
+    elif currentPosition == 1:
+        printToTerminal('')
+        printToTerminal(item[0].ljust(w) + item[1].ljust(w) + item[2].ljust(w))
+        printToTerminal('')
+        printToTerminal('')
+        printToTerminal('1 3g'.ljust(w) + '[2] 3g'.ljust(w) + '3 3g'.ljust(w))
+        printToTerminal('|_______________________________________________| 4 1g')
+        printToTerminal('')
+        printToTerminal('5 to Main Menu')
+    elif currentPosition == 2:
+        printToTerminal('')
+        printToTerminal(item[0].ljust(w) + item[1].ljust(w) + item[2].ljust(w))
+        printToTerminal('')
+        printToTerminal('')
+        printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '[3] 3g'.ljust(w))
+        printToTerminal('|_______________________________________________| 4 1g')
+        printToTerminal('')
+        printToTerminal('5 to Main Menu')
+    elif currentPosition == 3:
+        printToTerminal('')
+        printToTerminal(item[0].ljust(w) + item[1].ljust(w) + item[2].ljust(w))
+        printToTerminal('')
+        printToTerminal('')
+        printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
+        printToTerminal('|_______________________________________________| [4] 1g')
+        printToTerminal('')
+        printToTerminal('5 to Main Menu')
+    elif currentPosition == 4:
+        printToTerminal('')
+        printToTerminal(item[0].ljust(w) + item[1].ljust(w) + item[2].ljust(w))
+        printToTerminal('')
+        printToTerminal('')
+        printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
+        printToTerminal('|_______________________________________________| 4 1g')
+        printToTerminal('')
+        printToTerminal('[5] to Main Menu')
 
 
 class Enemy:
@@ -164,22 +202,35 @@ while playing:
         # if it's 1, 2, or 3, we move to a different screen
         if nav == 1:
             mainMenu = False
+            nav = 0
             shop = True
+
         elif nav == 2:
             mainMenu = False
             battle = True
+            nav = 0
         elif nav == 3:
             out = True
             mainMenu = False
+            nav = 0
 
     if shop:
         clearTerminal()
-        nav = 0
+
         infoText = "Please make a selection to re-roll that aspect!\n5 to go back to the main menu\n6 to save current item to hall of fame"
         uiTop()
-        shopDisp(myItem.getList())
+        shopDisp(myItem.getList(), currentPosition)
         uiBot(infoText)
-        #nav = int(input())
+
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    currentPosition = (currentPosition - 1) % 5
+                elif event.key == pygame.K_RIGHT:
+                    currentPosition = (currentPosition + 1) % 5
+                if event.key == pygame.K_RETURN:
+                    nav = currentPosition + 1
+
         if (nav == 1 or nav == 2 or nav == 3) and (money >= 3): #money-3 == 0?
             money -= 3
             clearTerminal()
@@ -196,18 +247,10 @@ while playing:
             input()
 
         elif nav == 5:
-            clearTerminal()
-            infoText = "1. main menu\n2. battle screen"
-            uiTop()
-            shopDisp(myItem.getList())
-            uiBot(infoText)
-            #nav = int(input())
-            if nav == 1:
-                mainMenu = True
-                shop = False
-            elif nav == 2:
-                shop = False
-                battle = True
+            mainMenu = True
+            shop = False
+            currentPosition = 0
+
         elif nav == 6:
             clearTerminal()
             with open("user saved.txt", "a+") as file:
@@ -218,6 +261,8 @@ while playing:
             shopDisp(myItem.getList())
             uiBot(infoText)
             input()
+
+
 
     if battle:
         i = 1

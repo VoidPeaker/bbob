@@ -40,7 +40,7 @@ def printToTerminal(newLine):
     visibleText.append(newLine.ljust(80))
 
 def clearTerminal():
-    os.system('cls')
+    #os.system('cls')
     for i in range(numLines):
         visibleText.pop(0)
         visibleText.append("".ljust(lineWidth))
@@ -196,8 +196,10 @@ while playing:
                 if event.key == pygame.K_RETURN:
                     nav = currentPosition + 1
 
-        #nav = int(input()) # get input from user to navigate
         
+        if nav != 0:
+            print("nav = " + str(nav))
+        print("currentPosition = " + str(currentPosition))
 
         # if it's 1, 2, or 3, we move to a different screen
         if nav == 1:
@@ -268,6 +270,7 @@ while playing:
         i = 1
         combo = 0
         newenemy = Enemy(i)
+        nav = 0
 
         #nav = int(input())
         if nav == 1:
@@ -306,7 +309,7 @@ while playing:
                 input()
             
     if out:
-        nav = 0
+        nav = 1
         uiTop()
         printToTerminal('are you sure?')
         uiBot()

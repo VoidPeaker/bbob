@@ -1,5 +1,9 @@
 import random, os, json, time, math, pygame
+<<<<<<< HEAD
 from convertexcel import playerStatCalc, Item, allitBonus, myItem
+=======
+from convertexcel import playerStatCalc, Item, allitBonus
+>>>>>>> 4668055f7962cc727d8628a431798e85b80481b5
 
 os.system('cls')
 

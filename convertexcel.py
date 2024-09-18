@@ -53,27 +53,57 @@ class Item:
         elif word == "of":
             return ofJson[self.list[2]][attr] 
 
+    # def roll(self, nav):
+    #     #reroll individual values based on nav from the menu
+    #     if nav == 1:
+    #         adj = random.choices(adjPool, adjRarity)
+    #         Replace(self.list, 0, adj[0]) #replace function removes previous list element and adds the list element from line above
+    #     elif nav == 2:
+    #         noun = random.choices(nounPool, nounRarity)
+    #         Replace(self.list, 1, noun[0])
+    #     elif nav == 3:
+    #         of = random.choices(ofPool, ofRarity)
+    #         Replace(self.list, 2, of[0])
+    #     elif nav == 4:
+    #         adj = random.choices(adjPool, adjRarity)
+    #         noun = random.choices(nounPool, nounRarity)
+    #         of = random.choices(ofPool, ofRarity)
+    #         Replace(self.list, 0, adj[0])
+    #         Replace(self.list, 1, noun[0])
+    #         Replace(self.list, 2, of[0])
 
-    def roll(self, nav):
+    def roll(shopItem, nav, myItem):
+
+        #shopItem n = list of the elements 
+        #nav = which option is selected
+        #myItem = players item 
+
+
+
+
         #reroll individual values based on nav from the menu
-        if nav == 1:
-            adj = random.choices(adjPool, adjRarity)
-            Replace(self.list, 0, adj[0]) #replace function removes previous list element and adds the list element from line above
+        if nav == 1:#set current shop item value to the myitem value
+            Replace(myItem, 0, shopItem[0])
         elif nav == 2:
-            noun = random.choices(nounPool, nounRarity)
-            Replace(self.list, 1, noun[0])
+            Replace(myItem, 1, shopItem[1])
         elif nav == 3:
-            of = random.choices(ofPool, ofRarity)
-            Replace(self.list, 2, of[0])
-        elif nav == 4:
+            Replace(myItem, 2, shopItem[2])
+        elif nav == 4: #reroll only the shop
             adj = random.choices(adjPool, adjRarity)
             noun = random.choices(nounPool, nounRarity)
             of = random.choices(ofPool, ofRarity)
-            Replace(self.list, 0, adj[0])
-            Replace(self.list, 1, noun[0])
-            Replace(self.list, 2, of[0])          
-        else:
-            print("bozo")
+            Replace(shopItem, 0, adj[0])
+            Replace(shopItem, 1, noun[0])
+            Replace(shopItem, 2, of[0])
+
+    def initRoll(self):
+        adj = random.choices(adjPool, adjRarity)
+        noun = random.choices(nounPool, nounRarity)
+        of = random.choices(ofPool, ofRarity)
+        Replace(self.list, 0, adj[0])
+        Replace(self.list, 1, noun[0])
+        Replace(self.list, 2, of[0])
+
 
     def toReadable(self):
         s = self.list[0] + " " + self.list[1] + " " + self.list[2]
@@ -84,7 +114,10 @@ class Item:
 
 
 myItem = Item()
+shopItem = Item()
 myItem.roll(4)
+shopItem.roll(4)
+
 
 
 

@@ -1,7 +1,5 @@
 import random, os, json, time, math, pygame
-from convertexcel import playerStatCalc, Item, allitBonus, myItem
-
-
+from convertexcel import *
 
 mainMenu = True
 shop = False
@@ -46,7 +44,7 @@ def clearTerminal():
         visibleText.append("".ljust(lineWidth))
 
 
-def shopDisp(item, currentPosition):
+def shopDisp(item, currentPosition): #menu animation
     w = 20
     printToTerminal('')
     printToTerminal(item[0].ljust(w) + item[1].ljust(w) + item[2].ljust(w))
@@ -56,28 +54,27 @@ def shopDisp(item, currentPosition):
         printToTerminal('[1] 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
         printToTerminal('|_______________________________________________| 4 1g')
         printToTerminal('')
-        printToTerminal('5 to Main Menu')
+        printToTerminal('5 to Confirm and Main Menu')
     elif currentPosition == 1:
         printToTerminal('1 3g'.ljust(w) + '[2] 3g'.ljust(w) + '3 3g'.ljust(w))
         printToTerminal('|_______________________________________________| 4 1g')
         printToTerminal('')
-        printToTerminal('5 to Main Menu')
+        printToTerminal('5 to Confirm and Main Menu')
     elif currentPosition == 2:
         printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '[3] 3g'.ljust(w))
         printToTerminal('|_______________________________________________| 4 1g')
         printToTerminal('')
-        printToTerminal('5 to Main Menu')
+        printToTerminal('5 to Confirm and Main Menu')
     elif currentPosition == 3:
         printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
         printToTerminal('|_______________________________________________| [4] 1g')
         printToTerminal('')
-        printToTerminal('5 to Main Menu')
+        printToTerminal('5 to Confirm and Main Menu')
     elif currentPosition == 4:
         printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
         printToTerminal('|_______________________________________________| 4 1g')
         printToTerminal('')
-        printToTerminal('[5] to Main Menu')
-
+        printToTerminal('[5] to Confirm and Main Menu')
 
 class Enemy:
     def __init__(self, level):
@@ -109,7 +106,6 @@ class Player:
         if enemyDamage - self.playerDefence > 0:
             self.playerHp = self.playerHp - (enemyDamage - self.playerDefence)
 
-
 newenemy = Enemy(1)
 pc = Player()
 
@@ -121,12 +117,10 @@ def uiTop():
     printToTerminal(myItem.toReadable())
     if allitBonus(myItem):
         printToTerminal('alliteration bonus!!')
-    #printToTerminal(playing, mainMenu, shop, battle, nav)
     playerStatCalc(myItem)
     printToTerminal("---------------------------------------------")
 def uiBot(thisText = "> "):
     printToTerminal("---------------------------------------------")
-    #printToTerminal("{}".format(thisText))
 def menu1(currentPosition):
     printToTerminal("please make a selection")
     if(currentPosition == 0):
@@ -202,7 +196,7 @@ while playing:
 
         infoText = "Please make a selection to re-roll that aspect!\n5 to go back to the main menu\n6 to save current item to hall of fame"
         uiTop()
-        shopDisp(myItem.getList(), currentPosition)
+        shopDisp(shopItem.getList(), currentPosition, myItem.getList()) #sending the item string as it currently is, and the position of the highlighted number
         uiBot(infoText)
 
         for event in events:

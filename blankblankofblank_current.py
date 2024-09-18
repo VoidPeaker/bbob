@@ -75,6 +75,12 @@ def shopDisp(item, currentPosition): #menu animation
         printToTerminal('|_______________________________________________| 4 1g')
         printToTerminal('')
         printToTerminal('[5] to Confirm and Main Menu')
+    else:
+        printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
+        printToTerminal('|_______________________________________________| 4 1g')
+        printToTerminal('')
+        printToTerminal('[5] to Confirm and Main Menu')
+
 
 class Enemy:
     def __init__(self, level):
@@ -135,6 +141,11 @@ def menu1(currentPosition):
         printToTerminal(" 1. start")
         printToTerminal(" 2. battle")
         printToTerminal("[3] quit")
+    else:
+        printToTerminal(" 1. start")
+        printToTerminal(" 2. battle")
+        printToTerminal("[3] quit")
+
     
 
 
@@ -171,10 +182,30 @@ while playing:
                     currentPosition = (currentPosition - 1) % 3
                 elif event.key == pygame.K_DOWN:
                     currentPosition = (currentPosition + 1) % 3
-                if event.key == pygame.K_RETURN:
+                if (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
                     nav = currentPosition + 1
 
-        
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
+                    currentPosition = 0
+                elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
+                    currentPosition = 1
+                elif (event.key == pygame.K_3) or (event.key == pygame.K_KP3):
+                    currentPosition = 2
+                elif (event.key == pygame.K_4) or (event.key == pygame.K_KP4):
+                    currentPosition = 3
+                elif (event.key == pygame.K_5) or (event.key == pygame.K_KP5):
+                    currentPosition = 4
+                elif (event.key == pygame.K_6) or (event.key == pygame.K_KP6):
+                    currentPosition = 5
+                elif (event.key == pygame.K_7) or (event.key == pygame.K_KP7):
+                    currentPosition = 6
+                elif (event.key == pygame.K_8) or (event.key == pygame.K_KP8):
+                    currentPosition = 7
+                elif (event.key == pygame.K_9) or (event.key == pygame.K_KP9):
+                    currentPosition = 8
+
 
         # if it's 1, 2, or 3, we move to a different screen
         if nav == 1:
@@ -196,7 +227,7 @@ while playing:
 
         infoText = "Please make a selection to re-roll that aspect!\n5 to go back to the main menu\n6 to save current item to hall of fame"
         uiTop()
-        shopDisp(shopItem.getList(), currentPosition, myItem.getList()) #sending the item string as it currently is, and the position of the highlighted number
+        shopDisp(shopItem.getList(), currentPosition) #sending the item string as it currently is, and the position of the highlighted number
         uiBot(infoText)
 
         for event in events:
@@ -205,8 +236,29 @@ while playing:
                     currentPosition = (currentPosition - 1) % 5
                 elif event.key == pygame.K_RIGHT:
                     currentPosition = (currentPosition + 1) % 5
-                if event.key == pygame.K_RETURN:
+                if (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
                     nav = currentPosition + 1
+
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
+                    currentPosition = 0
+                elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
+                    currentPosition = 1
+                elif (event.key == pygame.K_3) or (event.key == pygame.K_KP3):
+                    currentPosition = 2
+                elif (event.key == pygame.K_4) or (event.key == pygame.K_KP4):
+                    currentPosition = 3
+                elif (event.key == pygame.K_5) or (event.key == pygame.K_KP5):
+                    currentPosition = 4
+                elif (event.key == pygame.K_6) or (event.key == pygame.K_KP6):
+                    currentPosition = 5
+                elif (event.key == pygame.K_7) or (event.key == pygame.K_KP7):
+                    currentPosition = 6
+                elif (event.key == pygame.K_8) or (event.key == pygame.K_KP8):
+                    currentPosition = 7
+                elif (event.key == pygame.K_9) or (event.key == pygame.K_KP9):
+                    currentPosition = 8
 
         if (nav == 1 or nav == 2 or nav == 3) and (money >= 3): #money-3 == 0?
             money -= 3

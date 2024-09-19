@@ -1,5 +1,6 @@
 import random, math, pygame
 from convertexcel import *
+from counting_ import *
 
 mainMenu = True
 shop = False
@@ -123,6 +124,7 @@ def uiTop():
     printToTerminal(myItem.toReadable())
     if allitBonus(myItem):
         printToTerminal('alliteration bonus!!')
+    printToTerminal(setBonus())
     printToTerminal("attack: {}  defense: {}  speed: {}".format(playerStatCalc(myItem)[0], playerStatCalc(myItem)[1], playerStatCalc(myItem)[2]))
     printToTerminal("---------------------------------------------")
 def uiBot(thisText = "> "):

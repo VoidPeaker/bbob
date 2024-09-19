@@ -1,4 +1,4 @@
-import random, os, json, time, math, pygame
+import random, math, pygame
 from convertexcel import *
 
 mainMenu = True
@@ -123,7 +123,7 @@ def uiTop():
     printToTerminal(myItem.toReadable())
     if allitBonus(myItem):
         printToTerminal('alliteration bonus!!')
-    playerStatCalc(myItem)
+    printToTerminal("attack: {}  defense: {}  speed: {}".format(playerStatCalc(myItem)[0], playerStatCalc(myItem)[1], playerStatCalc(myItem)[2]))
     printToTerminal("---------------------------------------------")
 def uiBot(thisText = "> "):
     printToTerminal("---------------------------------------------")
@@ -339,13 +339,13 @@ while playing:
                 input()
             
     elif out:
-        nav = 1
+        clearTerminal()
         uiTop()
         printToTerminal('are you sure?')
         uiBot()
         #nav = int(input())
         if nav == 1:
-            exit()
+            playing = False
         elif nav == 0:
             mainMenu = True
             out = False

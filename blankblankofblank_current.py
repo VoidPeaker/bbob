@@ -92,12 +92,12 @@ class Enemy:
         lastName = ['the strange', 'beepy, the eepy deepy zeepy' , 'the younger', 'the older', 'greepus', 'the sleepy', '', '', '', '', '', '', 'smith', 'agnew']
         self.name = random.choice(firstName) + " " + random.choice(lastName)
         self.hp = baseHp + len(self.name) + math.ceil(level*1.5)
-        self.defence = baseDef + (level * random.choice(range(2,4)))
+        self.defense = baseDef + (level * random.choice(range(2,4)))
         self.att = baseAtt + level + (level * random.choice(range(2,4)))
 
     def damage(self, itemDamage):
-        if itemDamage - self.defence > 0:
-            self.hp = self.hp - (itemDamage - self.defence)
+        if itemDamage - self.defense > 0:
+            self.hp = self.hp - (itemDamage - self.defense)
         else:
             self.hp = self.hp - 1
 
@@ -106,12 +106,12 @@ class Player:
     def __init__(self):
         self.itemDamage = 5
         self.playerHp = 15
-        self.playerDefence = 5
+        self.playerDefense = 5
 
 
     def damagePlayer(self, enemyDamage):
-        if enemyDamage - self.playerDefence > 0:
-            self.playerHp = self.playerHp - (enemyDamage - self.playerDefence)
+        if enemyDamage - self.playerDefense > 0:
+            self.playerHp = self.playerHp - (enemyDamage - self.playerDefense)
 
 newenemy = Enemy(1)
 pc = Player()
@@ -148,6 +148,15 @@ def menu1(currentPosition):
         printToTerminal(" 2. battle")
         printToTerminal("[3] quit")
 
+def battleMenu(currentPosition):
+    w = 40
+    printToTerminal("what do you do?")
+    if(currentPosition == 0):
+        printToTerminal('[1] fight!'.ljust(w) + ' 2  shop!'.ljust(w))
+    elif (currentPosition == 1):
+        printToTerminal(' 1  fight!'.ljust(w) + '[2] shop!'.ljust(w))
+    else:
+        printToTerminal(' 1  fight!'.ljust(w) + '[2] shop!'.ljust(w))
     
 
 
@@ -218,6 +227,7 @@ while playing:
         elif nav == 2:
             mainMenu = False
             battle = True
+            newenemy = Enemy(i)
             nav = 0
         elif nav == 3:
             out = True
@@ -227,7 +237,6 @@ while playing:
     elif shop:
         clearTerminal()
 
-        infoText = "Please make a selection to re-roll that aspect!\n5 to go back to the main menu\n6 to save current item to hall of fame"
         uiTop()
         shopDisp(shopItem.getList(), currentPosition) #sending the item string as it currently is, and the position of the highlighted number
         uiBot(infoText)
@@ -299,15 +308,57 @@ while playing:
 
 
     elif battle:
+        clearTerminal()
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    currentPosition = (currentPosition - 1) % 2
+                elif event.key == pygame.K_RIGHT:
+                    currentPosition = (currentPosition + 1) % 2
+                if (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
+                    nav = currentPosition + 1
+
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
+                    currentPosition = 0
+                elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
+                    currentPosition = 1
+                elif (event.key == pygame.K_3) or (event.key == pygame.K_KP3):
+                    currentPosition = 2
+                elif (event.key == pygame.K_4) or (event.key == pygame.K_KP4):
+                    currentPosition = 3
+                elif (event.key == pygame.K_5) or (event.key == pygame.K_KP5):
+                    currentPosition = 4
+                elif (event.key == pygame.K_6) or (event.key == pygame.K_KP6):
+                    currentPosition = 5
+                elif (event.key == pygame.K_7) or (event.key == pygame.K_KP7):
+                    currentPosition = 6
+                elif (event.key == pygame.K_8) or (event.key == pygame.K_KP8):
+                    currentPosition = 7
+                elif (event.key == pygame.K_9) or (event.key == pygame.K_KP9):
+                    currentPosition = 8
+
         i = 1
         combo = 0
-        newenemy = Enemy(i)
         nav = 0
+        if nav == 0:
+            uiTop()
+            printToTerminal('{} attacks!!!!!! he has {} health and {} defense!'.format(newenemy.name, newenemy.hp, newenemy.defense))
+            battleMenu(currentPosition)
+            uiBot()
+            nav = 9
+              
 
+
+
+
+
+        '''
         #nav = int(input())
         if nav == 1:
             attack = True
-            printToTerminal('{} attacks!!!!!! he has {} health and {} defence!\nenter to attack!'.format(newenemy.name, newenemy.hp, newenemy.defence))
+            printToTerminal('{} attacks!!!!!! he has {} health and {} defense!\nenter to attack!'.format(newenemy.name, newenemy.hp, newenemy.defense))
         elif nav == 2:
             battle = False
             shop = True
@@ -318,7 +369,7 @@ while playing:
                 printToTerminal("you won!")
                 input()
                 newenemy = Enemy(i)
-                printToTerminal('uh oh!\n{} attacks!!!!!! he has {} health and {} defence!\nenter to attack!'.format(newenemy.name, newenemy.hp, newenemy.defence))
+                printToTerminal('uh oh!\n{} attacks!!!!!! he has {} health and {} defense!\nenter to attack!'.format(newenemy.name, newenemy.hp, newenemy.defense))
                 combo +=1
                 i += 1
                 pc.itemDamage += 1
@@ -337,9 +388,9 @@ while playing:
                 printToTerminal("enemies beaten: {}\nitem attack: {}\ncurrent health: {}".format(combo, pc.itemDamage, pc.playerHp))
                 newenemy.damage(pc.itemDamage)
                 pc.damagePlayer(newenemy.att)
-                printToTerminal("{}'s current health is {} with defence {}".format(newenemy.name, newenemy.hp, newenemy.defence))
+                printToTerminal("{}'s current health is {} with defense {}".format(newenemy.name, newenemy.hp, newenemy.defense))
                 input()
-            
+                '''      
     elif out:
         clearTerminal()
         uiTop()

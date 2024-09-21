@@ -145,12 +145,12 @@ def playerStatCalc(item): #is list rn
         a = 2
     baseAtt = 5
     baseDef = 1
-    asb = 1 #adjective set bonus
-    nsb = 1 #noun set bonus
-    osb = 1 #of set bonus
+    aab, adb, asb = 1 #adjective attack bonus, adjective defense bonus, adjective speed bonus
+    nab, ndb, nsb = 1 #noun set bonus
+    oab, odb, osb = 1 #of set bonus
 
-    att = a*((asb*adjAtt) + (nsb*nounsAtt) + (osb*ofAtt) + baseAtt)
-    defence = a*((asb*adjDef) + (nsb*nounsDef) + (osb*ofDef) + baseDef)
+    att = a*((aab*adjAtt) + (nab*nounsAtt) + (oab*ofAtt) + baseAtt)
+    defence = a*((adb*adjDef) + (ndb*nounsDef) + (odb*ofDef) + baseDef)
     speed = a*(int((asb*adjSpd)) + int((nsb*nounsSpd)) + (osb*ofSpd)+1)
     stats = [att, defence, speed]
     return stats

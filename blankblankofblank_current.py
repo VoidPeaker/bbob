@@ -94,6 +94,7 @@ class Enemy:
         self.hp = baseHp + len(self.name) + math.ceil(level*1.5)
         self.defense = baseDef + (level * random.choice(range(2,4)))
         self.att = baseAtt + level + (level * random.choice(range(2,4)))
+        self.gold = (level * random.choice(range(2,4))) + math.ceil(len(self.name)/3)
 
     def damage(self, itemDamage):
         if itemDamage - self.defense > 0:
@@ -102,7 +103,6 @@ class Enemy:
             self.hp = self.hp - 1
 
 class Player:
-
     def __init__(self):
         self.itemDamage = 5
         self.playerHp = 15
@@ -116,9 +116,6 @@ class Player:
 newenemy = Enemy(1)
 pc = Player()
 
-#def Screen():
-#    os.system('cls')
-
 def uiTop():
     printToTerminal("gold: " + str(money))
     printToTerminal(myItem.toReadable())
@@ -129,6 +126,13 @@ def uiTop():
     printToTerminal("---------------------------------------------")
 def uiBot(thisText = "> "):
     printToTerminal("---------------------------------------------")
+    
+    # idk why this isnt working; comments are the intentions. also the i is saying its not referenced but idk wky
+    # for i in range((numLines) - len(visibleText)): ## for all of the lines that are not taken up by text
+    #     visibleText.append("")                     ## put a blank line
+
+
+
 def menu1(currentPosition):
     printToTerminal("please make a selection")
     if(currentPosition == 0):
@@ -148,10 +152,10 @@ def menu1(currentPosition):
         printToTerminal(" 2. battle")
         printToTerminal("[3] quit")
 
-def battleMenu(currentPosition):
+def battleDisp(currentPosition):
     w = 40
     printToTerminal("what do you do?")
-    if(currentPosition == 0):
+    if (currentPosition == 0):
         printToTerminal('[1] fight!'.ljust(w) + ' 2  shop!'.ljust(w))
     elif (currentPosition == 1):
         printToTerminal(' 1  fight!'.ljust(w) + '[2] shop!'.ljust(w))
@@ -239,7 +243,7 @@ while playing:
 
         uiTop()
         shopDisp(shopItem.getList(), currentPosition) #sending the item string as it currently is, and the position of the highlighted number
-        uiBot(infoText)
+        uiBot()
 
         for event in events:
             if event.type == pygame.KEYDOWN:
@@ -305,8 +309,6 @@ while playing:
             uiBot(infoText)
             input()
 
-
-
     elif battle:
         clearTerminal()
         for event in events:
@@ -340,15 +342,14 @@ while playing:
                     currentPosition = 8
 
         i = 1
-        combo = 0
+        clearing = 0
         nav = 0
         if nav == 0:
             uiTop()
-            printToTerminal('{} attacks!!!!!! he has {} health and {} defense!'.format(newenemy.name, newenemy.hp, newenemy.defense))
-            battleMenu(currentPosition)
-            uiBot()
-            nav = 9
-              
+            printToTerminal('{} attacks!!!!!'.format(newenemy.name))
+            printToTerminal("he has {} health, {} defense, {} gold!".format(newenemy.hp, newenemy.defense, newenemy.gold))
+            battleDisp(currentPosition)
+            uiBot()             
 
 
 

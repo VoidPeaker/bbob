@@ -1,4 +1,4 @@
-import random, math, pygame
+import random, math, pygame, time, sys
 from convertexcel import *
 from counting_ import *
 
@@ -6,7 +6,7 @@ mainMenu = True
 shop = False
 battle = False
 out = False
-money = 100000000
+money = 100
 nav = 0
 currentPosition = 0
 
@@ -44,6 +44,18 @@ def clearTerminal():
         visibleText.pop(0)
         visibleText.append("".ljust(lineWidth))
 
+def writeAnim(text, speed):
+    for character in text:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(speed)
+
+def loopDelay(text = '. . . . ', speed = .1):
+    speed = .2
+    while True:
+        #print('looped {} times'.format(loopCount))
+        writeAnim('. . . . . ', speed)
+        speed1 = speed1 - speed1/20
 
 def shopDisp(item, currentPosition): #menu animation
     w = 20
@@ -104,7 +116,7 @@ class Enemy:
 
 class Player:
     def __init__(self):
-        self.itemDamage = 5
+        self.itemDamage = playerStatCalc(myItem)[0]
         self.playerHp = 15
         self.playerDefense = 5
 
@@ -278,13 +290,14 @@ while playing:
         if (nav == 1 or nav == 2 or nav == 3) and (money >= 3): #money-3 == 0?
             money -= 3
             clearTerminal()
-            myItem.roll(nav)
+            Replace(myItem.getList(), nav-1,shopItem.getList()[nav-1] )
+            shopItem.roll(nav)
             nav = 0
 
         elif (nav == 4) and (money >= 1):
-            money = money - 1
+            money -= 1
             clearTerminal()
-            myItem.roll(nav)
+            shopItem.roll(nav)
             nav = 0
 
         elif (nav == 1 or nav == 2 or nav == 3 or nav == 4) and (money - 3 <= 0):
@@ -326,23 +339,9 @@ while playing:
                     currentPosition = 0
                 elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
                     currentPosition = 1
-                elif (event.key == pygame.K_3) or (event.key == pygame.K_KP3):
-                    currentPosition = 2
-                elif (event.key == pygame.K_4) or (event.key == pygame.K_KP4):
-                    currentPosition = 3
-                elif (event.key == pygame.K_5) or (event.key == pygame.K_KP5):
-                    currentPosition = 4
-                elif (event.key == pygame.K_6) or (event.key == pygame.K_KP6):
-                    currentPosition = 5
-                elif (event.key == pygame.K_7) or (event.key == pygame.K_KP7):
-                    currentPosition = 6
-                elif (event.key == pygame.K_8) or (event.key == pygame.K_KP8):
-                    currentPosition = 7
-                elif (event.key == pygame.K_9) or (event.key == pygame.K_KP9):
-                    currentPosition = 8
 
-        i = 1
-        clearing = 0
+        turns = 0
+        i = 1 #this is the enemy level, but i realized it was going up one per location, so it also equals clearing
         nav = 0
         if nav == 0:
             uiTop()
@@ -350,7 +349,18 @@ while playing:
             printToTerminal("he has {} health, {} defense, {} gold!".format(newenemy.hp, newenemy.defense, newenemy.gold))
             battleDisp(currentPosition)
             uiBot()             
+        elif nav == 1:
+            uiTop
+            printToTerminal("clearing: {}").format(i)
+            newenemy.damage(pc.itemDamage)
+            pc.damagePlayer(newenemy.att)
+            printToTerminal("{}'s current health is {} with defense {}".format(newenemy.name, newenemy.hp, newenemy.defense))
+            loopDelay()
+            uiBot()
 
+        elif nav == 2:
+            battle = False
+            shop = True
 
 
 

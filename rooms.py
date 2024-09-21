@@ -1,14 +1,25 @@
-import random
-print("you come to a fork in the road")
+import time, sys, os
 
-def Room():
-    roomName = ['battle', 'shop', 'mystery']
-    return random.choice(roomName)
+text = ['this is my text', 'this is the next part of my text', 'fart machine']
 
+t=.1
 
-#make a room of a random name 
-#
-#
-#
+def writeAnim(text, speed):
+    for character in text:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(speed)
 
-print(Room())
+def loopDelay(text = '. . . . ', speed = .1):
+    loopCount = 0
+    speed = .2
+
+    while True:
+
+        print('looped {} times'.format(loopCount))
+        writeAnim('. . . . . ', speed)
+        speed1 = speed1 - speed1/20
+ 
+    
+
+loopDelay() 

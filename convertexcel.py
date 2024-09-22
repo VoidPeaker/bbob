@@ -53,7 +53,6 @@ class Item:
         elif word == "of":
             return ofJson[self.list[2]][attr] 
 
-
     def roll(self, nav):
         #reroll individual values based on nav from the menu
         if nav == 1:
@@ -71,9 +70,40 @@ class Item:
             of = random.choices(ofPool, ofRarity)
             Replace(self.list, 0, adj[0])
             Replace(self.list, 1, noun[0])
-            Replace(self.list, 2, of[0])          
-        else:
-            print("bozo")
+            Replace(self.list, 2, of[0])
+
+    # def roll(shopItem, nav, myItem):
+
+    #     #shopItem n = list of the elements 
+    #     #nav = which option is selected
+    #     #myItem = players item 
+
+
+
+
+    #     #reroll individual values based on nav from the menu
+    #     if nav == 1:#set current shop item value to the myitem value
+    #         Replace(myItem, 0, shopItem[0])
+    #     elif nav == 2:
+    #         Replace(myItem, 1, shopItem[1])
+    #     elif nav == 3:
+    #         Replace(myItem, 2, shopItem[2])
+    #     elif nav == 4: #reroll only the shop
+    #         adj = random.choices(adjPool, adjRarity)
+    #         noun = random.choices(nounPool, nounRarity)
+    #         of = random.choices(ofPool, ofRarity)
+    #         Replace(shopItem, 0, adj[0])
+    #         Replace(shopItem, 1, noun[0])
+    #         Replace(shopItem, 2, of[0])
+
+    def initRoll(self):
+        adj = random.choices(adjPool, adjRarity)
+        noun = random.choices(nounPool, nounRarity)
+        of = random.choices(ofPool, ofRarity)
+        Replace(self.list, 0, adj[0])
+        Replace(self.list, 1, noun[0])
+        Replace(self.list, 2, of[0])
+
 
     def toReadable(self):
         s = self.list[0] + " " + self.list[1] + " " + self.list[2]
@@ -84,7 +114,10 @@ class Item:
 
 
 myItem = Item()
+shopItem = Item()
 myItem.roll(4)
+shopItem.roll(4)
+
 
 
 
@@ -112,13 +145,20 @@ def playerStatCalc(item): #is list rn
         a = 2
     baseAtt = 5
     baseDef = 1
-    asb = 1 #adjective set bonus
+    aab=1
+    adb=1
+    asb = 1 #adjective attack bonus, adjective defense bonus, adjective speed bonus
+    nab=1
+    ndb=1
     nsb = 1 #noun set bonus
+    oab =1
+    odb=1
     osb = 1 #of set bonus
 
-    att = a*((asb*adjAtt) + (nsb*nounsAtt) + (osb*ofAtt) + baseAtt)
-    defence = a*((asb*adjDef) + (nsb*nounsDef) + (osb*ofDef) + baseDef)
-    speed = a*((asb*adjSpd) + (nsb*nounsSpd) + (osb*ofSpd)+1)
-    return att, defence, speed
+    att = a*((aab*adjAtt) + (nab*nounsAtt) + (oab*ofAtt) + baseAtt)
+    defence = a*((adb*adjDef) + (ndb*nounsDef) + (odb*ofDef) + baseDef)
+    speed = a*(int((asb*adjSpd)) + int((nsb*nounsSpd)) + (osb*ofSpd)+1)
+    stats = [att, defence, speed]
+    return stats
 
 #print(playerStatCalc(myItem))

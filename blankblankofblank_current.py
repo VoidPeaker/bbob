@@ -57,42 +57,43 @@ def loopDelay(text = '. . . . ', speed = .1):
         writeAnim('. . . . . ', speed)
         speed1 = speed1 - speed1/20
 
-def shopDisp(item, currentPosition): #menu animation
-    w = 20
+def shopDisp(item1, item2, currentPosition): #menu animation
+    w = 22
+    printToTerminal('make a selection:')
     printToTerminal('')
-    printToTerminal(item[0].ljust(w) + item[1].ljust(w) + item[2].ljust(w))
+    printToTerminal(item1[0].ljust(w) + item1[1].ljust(w) + item1[2].ljust(w))
     printToTerminal('')
-    printToTerminal('')
-    if currentPosition == 0:
-        printToTerminal('[1] 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
-        printToTerminal('|_______________________________________________| 4 1g')
-        printToTerminal('')
-        printToTerminal('5 to Confirm and Main Menu')
-    elif currentPosition == 1:
-        printToTerminal('1 3g'.ljust(w) + '[2] 3g'.ljust(w) + '3 3g'.ljust(w))
-        printToTerminal('|_______________________________________________| 4 1g')
-        printToTerminal('')
-        printToTerminal('5 to Confirm and Main Menu')
-    elif currentPosition == 2:
-        printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '[3] 3g'.ljust(w))
-        printToTerminal('|_______________________________________________| 4 1g')
-        printToTerminal('')
-        printToTerminal('5 to Confirm and Main Menu')
-    elif currentPosition == 3:
-        printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
-        printToTerminal('|_______________________________________________| [4] 1g')
-        printToTerminal('')
-        printToTerminal('5 to Confirm and Main Menu')
-    elif currentPosition == 4:
-        printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
-        printToTerminal('|_______________________________________________| 4 1g')
-        printToTerminal('')
-        printToTerminal('[5] to Confirm and Main Menu')
+
+    if currentPosition == 6:
+        printToTerminal('[7] 3g'.ljust(w) + ' 8 3g'.ljust(w) + ' 9 3g'.ljust(w))
+
+    elif currentPosition == 7:
+        printToTerminal(' 7 3g'.ljust(w) + '[8] 3g'.ljust(w) + ' 9 3g'.ljust(w))
+
+    elif currentPosition == 8:
+        printToTerminal(' 7 3g'.ljust(w) + ' 8 3g'.ljust(w) + '[9] 3g'.ljust(w))
     else:
-        printToTerminal('1 3g'.ljust(w) + '2 3g'.ljust(w) + '3 3g'.ljust(w))
-        printToTerminal('|_______________________________________________| 4 1g')
-        printToTerminal('')
-        printToTerminal('[5] to Confirm and Main Menu')
+        printToTerminal(' 7 3g'.ljust(w) + ' 8 3g'.ljust(w) + ' 9 3g'.ljust(w))
+
+    printToTerminal('')
+    printToTerminal(item2[0].ljust(w) + item2[1].ljust(w) + item2[2].ljust(w))
+    printToTerminal('')
+
+    if currentPosition == 3:
+        printToTerminal('[4] 3g'.ljust(w) + ' 5 3g'.ljust(w) + ' 6 3g'.ljust(w))
+
+    elif currentPosition == 4:
+        printToTerminal(' 4 3g'.ljust(w) + '[5] 3g'.ljust(w) + ' 6 3g'.ljust(w))
+
+    elif currentPosition == 5:
+        printToTerminal(' 4 3g'.ljust(w) + ' 5 3g'.ljust(w) + '[6] 3g'.ljust(w))
+
+    else:
+        printToTerminal(' 4 3g'.ljust(w) + ' 5 3g'.ljust(w) + ' 6 3g'.ljust(w))
+
+    
+    
+
 
 
 class Enemy:
@@ -174,9 +175,26 @@ def battleDisp(currentPosition):
     else:
         printToTerminal(' 1  fight!'.ljust(w) + '[2] shop!'.ljust(w))
     
+def shopItemConfirm(myItem = myItem, shopItem1 = shopItem1, shopItem2 = shopItem2,  nav = 0):
+    _index = 0 #initialize local variable to pass to either of the items that is being asked about
+    if nav == 7 or 4:
+        _index = 0
+    if nav == 8 or 5:
+        _index = 1
+    if nav == 9 or 6:
+        _index = 2
+
+    if nav == 7 or 8 or 9:
+        printToTerminal(shopItem1.getList()[_index])
+        printToTerminal("")
+        printToTerminal("attack: {}  defense: {}  speed: {}".format((shopItem1.getInfo(shopItem1.getList()[_index], "att")),
+                                                                    (shopItem1.getInfo(shopItem1.getList()[_index], "def")), 
+                                                                    (shopItem1.getInfo(shopItem1.getList()[_index], "speed"))))
+        printToTerminal("")
 
 
-#main playing loop
+
+#main playing loop``
 while playing:
 
     # poll for events
@@ -254,7 +272,7 @@ while playing:
         clearTerminal()
 
         uiTop()
-        shopDisp(shopItem.getList(), currentPosition) #sending the item string as it currently is, and the position of the highlighted number
+        shopDisp(shopItem1.getList(), shopItem2.getList(), currentPosition) #sending the item string as it currently is, and the position of the highlighted number
         uiBot()
 
         for event in events:
@@ -287,17 +305,18 @@ while playing:
                 elif (event.key == pygame.K_9) or (event.key == pygame.K_KP9):
                     currentPosition = 8
 
-        if (nav == 1 or nav == 2 or nav == 3) and (money >= 3): #money-3 == 0?
+        if (nav == 7 or nav == 8 or nav == 9) and (money >= 3): #money-3 == 0?
             money -= 3
             clearTerminal()
-            Replace(myItem.getList(), nav-1,shopItem.getList()[nav-1] )
-            shopItem.roll(nav)
+            shopItemConfirm(nav = nav)
+            #Replace(myItem.getList(), nav-1,shopItem1.getList()[nav-1] )
+            #shopItem1.roll(nav)
             nav = 0
 
         elif (nav == 4) and (money >= 1):
             money -= 1
             clearTerminal()
-            shopItem.roll(nav)
+            shopItem1.roll(nav)
             nav = 0
 
         elif (nav == 1 or nav == 2 or nav == 3 or nav == 4) and (money - 3 <= 0):

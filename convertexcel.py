@@ -114,9 +114,11 @@ class Item:
 
 
 myItem = Item()
-shopItem = Item()
+shopItem1 = Item()
+shopItem2 = Item()
 myItem.roll(4)
-shopItem.roll(4)
+shopItem1.roll(4)
+shopItem2.roll(4)
 
 
 

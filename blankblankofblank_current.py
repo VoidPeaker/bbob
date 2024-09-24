@@ -9,6 +9,7 @@ out = False
 money = 100
 nav = 0
 currentPosition = 0
+clearing = 0
 
 # pygame setup
 pygame.init()
@@ -65,15 +66,18 @@ def shopDisp(item1, item2, currentPosition): #menu animation
 
 
     if currentPosition == 6:
-        printToTerminal('[7] '.ljust(w) + ' 8 '.ljust(w) + ' 9 '.ljust(w))
+        printToTerminal('[7] '.ljust(w) + ' 8 '.ljust(w) + ' 9 '.ljust(w) + ' exit')
 
     elif currentPosition == 7:
-        printToTerminal(' 7 '.ljust(w) + '[8] '.ljust(w) + ' 9 '.ljust(w))
+        printToTerminal(' 7 '.ljust(w) + '[8] '.ljust(w) + ' 9 '.ljust(w) + ' exit')
 
     elif currentPosition == 8:
-        printToTerminal(' 7 '.ljust(w) + ' 8 '.ljust(w) + '[9] '.ljust(w))
+        printToTerminal(' 7 '.ljust(w) + ' 8 '.ljust(w) + '[9] '.ljust(w) + ' exit')
+
+    elif currentPosition == 9:
+        printToTerminal(' 7 '.ljust(w) + ' 8 '.ljust(w) + ' 9  '.ljust(w) + '[exit]')
     else:
-        printToTerminal(' 7 '.ljust(w) + ' 8 '.ljust(w) + ' 9 '.ljust(w))
+        printToTerminal(' 7 '.ljust(w) + ' 8 '.ljust(w) + ' 9 '.ljust(w) + ' exit')
 
     printToTerminal('')
     printToTerminal(item2[0].ljust(w) + item2[1].ljust(w) + item2[2].ljust(w))
@@ -131,8 +135,8 @@ class Enemy:
 class Player:
     def __init__(self):
         self.itemDamage = playerStatCalc(myItem)[0]
-        self.playerHp = 15
-        self.playerDefense = 5
+        self.playerHp = 5+(clearing+playerStatCalc(myItem)[1]/2)
+        self.playerDefense = playerStatCalc(myItem)[2]
 
 
     def damagePlayer(self, enemyDamage):
@@ -141,14 +145,19 @@ class Player:
 
 newenemy = Enemy(1)
 pc = Player()
+_index = 0
+subMenu = False
 
 def uiTop():
-    #printToTerminal("gold: " + str(money))
+    printToTerminal("gold: " + str(money))
     printToTerminal("nav:" + str(nav) + "currentPos:" + str(currentPosition))
-    #printToTerminal(myItem.toReadable())
+    #printToTerminal(str(_index))
+    printToTerminal(myItem.toReadable())
+    if battle:
+        printToTerminal("clearing: " + str(clearing))
     if allitBonus(myItem):
         printToTerminal('alliteration bonus!!')
-    #printToTerminal(setBonus())
+    printToTerminal(setBonus())
     #printToTerminal("attack: {}  defense: {}  speed: {}".format(playerStatCalc(myItem)[0], playerStatCalc(myItem)[1], playerStatCalc(myItem)[2]))
     printToTerminal("---------------------------------------------")
 def uiBot(thisText = "> "):
@@ -157,7 +166,6 @@ def uiBot(thisText = "> "):
     # idk why this isnt working; comments are the intentions. also the i is saying its not referenced but idk wky
     # for i in range((numLines) - len(visibleText)): ## for all of the lines that are not taken up by text
     #     visibleText.append("")                     ## put a blank line
-
 
 
 def mainmenuUI(currentPosition):
@@ -181,7 +189,6 @@ def mainmenuUI(currentPosition):
     
 def subMenuUI(currentPosition):
     w = 22
-
     if currentPosition == 0:
         printToTerminal('[yes]'.ljust(w) + ' no')
     elif currentPosition == 1:
@@ -200,10 +207,9 @@ def battleDisp(currentPosition):
         printToTerminal(' 1  fight!'.ljust(w) + '[2] shop!'.ljust(w))
 
 #main playing loop
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 while playing:
-
-
-
     # poll for events
     events = pygame.event.get()
     # pygame.QUIT event means the user clicked X to close your window
@@ -214,7 +220,6 @@ while playing:
     screen.fill(BLACK)
 
     clearTerminal()
-
     uiTop()
     mainmenuUI(currentPosition)
     uiBot()
@@ -264,7 +269,7 @@ while playing:
         elif nav == 2:
             mainMenu = False
             battle = True
-            newenemy = Enemy(i)
+            newenemy = Enemy(clearing)
             nav = 0
         elif nav == 3:
             out = True
@@ -272,9 +277,9 @@ while playing:
             nav = 0
 
     elif shop:
-        menuOptions = 5
+        menuOptions = 10
         clearTerminal()
-        subMenu = False
+        
         uiTop()
         shopDisp(shopItem1.getList(), shopItem2.getList(), currentPosition) #sending the item string as it currently is, and the position of the highlighted number
         uiBot()
@@ -285,6 +290,10 @@ while playing:
                     currentPosition = (currentPosition - 1) % menuOptions
                 elif event.key == pygame.K_RIGHT:
                     currentPosition = (currentPosition + 1) % menuOptions
+                elif event.key == pygame.K_UP:
+                    currentPosition = (currentPosition + 3) % menuOptions
+                elif event.key == pygame.K_DOWN:
+                    currentPosition = (currentPosition - 3) % menuOptions                                              
                 elif (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
                     currentPosition = 0
                 elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
@@ -310,32 +319,44 @@ while playing:
 
         if (nav == 4 or nav == 5 or nav == 6 or nav == 7 or nav == 8 or nav == 9) and (money -3 >= 0):
             subMenu = True
+            itemNumber = nav
+            nav = 0
         
-        if (nav == 1 or nav == 2 or nav == 3) and (money >= 1):
+        if (nav == 1 or nav == 2 or nav == 3) and (money >= 1) and not subMenu:
             money -= 1
             shopItem1.roll(nav)
             shopItem2.roll(nav)
             nav = 0
+
+        if nav == 10 and not subMenu:
+            shop = False
+            mainMenu = True
 
         elif (nav == 100 )and (money >= 4):
             money -= 4
             shopItem1.roll(4)
             shopItem2.roll(4)
             nav = 0 
-        elif subMenu:
 
+        elif nav == 10:
+            shop = False
+            mainMenu = True
+            nav = 0
+            currentPosition = 0
+        elif subMenu:
+            
             _index = 0 #initialize local variable to pass to either of the items that is being asked about
-            if nav == 7 or nav == 4:
+            if itemNumber == 7 or itemNumber == 4:
                 _index = 0
                 type = 'adj'
-            if nav == 8 or nav == 5:
+            if itemNumber == 8 or itemNumber == 5:
                 _index = 1
                 type = 'noun'
-            if nav == 9 or nav == 6:
+            if itemNumber == 9 or itemNumber == 6:
                 _index = 2
                 type = 'of'
 
-            if nav == 7 or 8 or 9:
+            if itemNumber in range(7,10):
                 clearTerminal()
                 uiTop()
                 printToTerminal(shopItem1.getList()[_index])
@@ -343,17 +364,21 @@ while playing:
                 printToTerminal("attack: {}  defense: {}  speed: {}".format((shopItem1.getInfo(type, "att")),
                                                                             (shopItem1.getInfo(type, "def")), 
                                                                             (shopItem1.getInfo(type, "speed"))))
-                printToTerminal("set(s): {}".format(shopItem2.getInfo(type, "set")))
+                printToTerminal("set(s): {}".format(shopItem1.getInfo(type, "set")))
                 printToTerminal("")
                 printToTerminal("do you want to replace?")
                 subMenuUI(currentPosition)
-                if nav == 0:
+                if nav == 1: #yes
+                    money -= 4
+                    Replace(myItem.getList(), _index, shopItem1.getList()[_index])
+                    subMenu = False
+                    shop = True
+                elif nav == 2: #no
                     subMenu = False
                     shop = True
 
 
-            elif nav == 4 or 5 or 6:
-                menuOptions = 2
+            elif itemNumber in range(4,7):
                 clearTerminal()
                 uiTop()
                 printToTerminal(shopItem2.getList()[_index])
@@ -365,6 +390,14 @@ while playing:
                 printToTerminal("")
                 printToTerminal("do you want to replace?")
                 subMenuUI(currentPosition)
+                if nav == 1: #yes
+                    money -= 4
+                    Replace(myItem.getList(), _index, shopItem2.getList()[_index])
+                    subMenu = False
+                    shop = True
+                elif nav == 2: #no
+                    subMenu = False
+                    shop = True
 
 
         '''
@@ -405,9 +438,6 @@ while playing:
             input()
         '''
 
-
-
-
     elif battle:
         clearTerminal()
         for event in events:
@@ -418,7 +448,6 @@ while playing:
                     currentPosition = (currentPosition + 1) % 2
                 if (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
                     nav = currentPosition + 1
-
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
@@ -427,15 +456,15 @@ while playing:
                     currentPosition = 1
 
         turns = 0
-        i = 1 #this is the enemy level, but i realized it was going up one per location, so it also equals clearing
+        clearing = 1 #this is the enemy level, but i realized it was going up one per location, so it also equals clearing
         nav = 0
-        if nav == 0:
+        if nav == 0: #fight
             uiTop()
             printToTerminal('{} attacks!!!!!'.format(newenemy.name))
             printToTerminal("he has {} health, {} defense, {} gold!".format(newenemy.hp, newenemy.defense, newenemy.gold))
             battleDisp(currentPosition)
             uiBot()             
-        elif nav == 1:
+        elif nav == 1: 
             uiTop
             printToTerminal("clearing: {}").format(i)
             newenemy.damage(pc.itemDamage)

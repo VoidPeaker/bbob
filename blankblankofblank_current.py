@@ -62,34 +62,53 @@ def shopDisp(item1, item2, currentPosition): #menu animation
     printToTerminal('make a selection:')
     printToTerminal('')
     printToTerminal(item1[0].ljust(w) + item1[1].ljust(w) + item1[2].ljust(w))
-    printToTerminal('')
+
 
     if currentPosition == 6:
-        printToTerminal('[7] 3g'.ljust(w) + ' 8 3g'.ljust(w) + ' 9 3g'.ljust(w))
+        printToTerminal('[7] '.ljust(w) + ' 8 '.ljust(w) + ' 9 '.ljust(w))
 
     elif currentPosition == 7:
-        printToTerminal(' 7 3g'.ljust(w) + '[8] 3g'.ljust(w) + ' 9 3g'.ljust(w))
+        printToTerminal(' 7 '.ljust(w) + '[8] '.ljust(w) + ' 9 '.ljust(w))
 
     elif currentPosition == 8:
-        printToTerminal(' 7 3g'.ljust(w) + ' 8 3g'.ljust(w) + '[9] 3g'.ljust(w))
+        printToTerminal(' 7 '.ljust(w) + ' 8 '.ljust(w) + '[9] '.ljust(w))
     else:
-        printToTerminal(' 7 3g'.ljust(w) + ' 8 3g'.ljust(w) + ' 9 3g'.ljust(w))
+        printToTerminal(' 7 '.ljust(w) + ' 8 '.ljust(w) + ' 9 '.ljust(w))
 
     printToTerminal('')
     printToTerminal(item2[0].ljust(w) + item2[1].ljust(w) + item2[2].ljust(w))
-    printToTerminal('')
+
 
     if currentPosition == 3:
-        printToTerminal('[4] 3g'.ljust(w) + ' 5 3g'.ljust(w) + ' 6 3g'.ljust(w))
+        printToTerminal('[4] '.ljust(w) + ' 5 '.ljust(w) + ' 6 '.ljust(w))
 
     elif currentPosition == 4:
-        printToTerminal(' 4 3g'.ljust(w) + '[5] 3g'.ljust(w) + ' 6 3g'.ljust(w))
+        printToTerminal(' 4 '.ljust(w) + '[5] '.ljust(w) + ' 6 '.ljust(w))
 
     elif currentPosition == 5:
-        printToTerminal(' 4 3g'.ljust(w) + ' 5 3g'.ljust(w) + '[6] 3g'.ljust(w))
+        printToTerminal(' 4 '.ljust(w) + ' 5 '.ljust(w) + '[6] '.ljust(w))
 
     else:
-        printToTerminal(' 4 3g'.ljust(w) + ' 5 3g'.ljust(w) + ' 6 3g'.ljust(w))
+        printToTerminal(' 4 '.ljust(w) + ' 5 '.ljust(w) + ' 6 '.ljust(w))
+
+    printToTerminal("")
+
+    if currentPosition == 0:
+        printToTerminal('[reroll!] 3g'.ljust(w) + ' reroll!  3g'.ljust(w) + ' reroll!  3g'.ljust(w))
+        printToTerminal('                                                            0  1g')
+    elif currentPosition == 1:
+        printToTerminal(' reroll!  3g'.ljust(w) + '[reroll!] 3g'.ljust(w) + ' reroll!  3g'.ljust(w))
+        printToTerminal('                                                            0  1g')
+    elif currentPosition == 2:
+        printToTerminal(' reroll!  3g'.ljust(w) + ' reroll!  3g'.ljust(w) + '[reroll!] 3g'.ljust(w))
+        printToTerminal('                                                            0  1g')
+    elif currentPosition == -1:
+        printToTerminal(' reroll!  3g'.ljust(w) + ' reroll!  3g'.ljust(w) + ' reroll!  3g'.ljust(w))
+        printToTerminal('                                                           [0] 1g')
+    else:
+        printToTerminal(' reroll!  3g'.ljust(w) + ' reroll!  3g'.ljust(w) + ' reroll!  3g'.ljust(w))
+        printToTerminal('                                                            0  1g')
+
 
     
     
@@ -304,6 +323,9 @@ while playing:
                     currentPosition = 7
                 elif (event.key == pygame.K_9) or (event.key == pygame.K_KP9):
                     currentPosition = 8
+                elif (event.key == pygame.K_0) or (event.key == pygame.K_KP0):
+                    currentPosition = -1
+                
 
         if (nav == 7 or nav == 8 or nav == 9) and (money >= 3): #money-3 == 0?
             money -= 3
@@ -380,9 +402,6 @@ while playing:
         elif nav == 2:
             battle = False
             shop = True
-
-
-
 
         '''
         #nav = int(input())

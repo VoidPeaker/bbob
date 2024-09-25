@@ -454,19 +454,20 @@ while playing:
                     currentPosition = 0
                 elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
                     currentPosition = 1
-
         turns = 0
         clearing = 1 #this is the enemy level, but i realized it was going up one per location, so it also equals clearing
         nav = 0
-        if nav == 0: #fight
+        fighting = False
+
+
+        if nav == 1: #fight
             uiTop()
             printToTerminal('{} attacks!!!!!'.format(newenemy.name))
             printToTerminal("he has {} health, {} defense, {} gold!".format(newenemy.hp, newenemy.defense, newenemy.gold))
             battleDisp(currentPosition)
             uiBot()             
-        elif nav == 1: 
+        elif nav == 2: 
             uiTop
-            printToTerminal("clearing: {}").format(i)
             newenemy.damage(pc.itemDamage)
             pc.damagePlayer(newenemy.att)
             printToTerminal("{}'s current health is {} with defense {}".format(newenemy.name, newenemy.hp, newenemy.defense))
@@ -476,6 +477,8 @@ while playing:
         elif nav == 2:
             battle = False
             shop = True
+            nav = currentPosition = 0
+
 
         '''
         #nav = int(input())

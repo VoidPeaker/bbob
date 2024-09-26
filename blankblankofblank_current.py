@@ -10,6 +10,9 @@ money = 100
 nav = 0
 currentPosition = 0
 clearing = 0
+fighting = False
+_index = 0
+subMenu = False
 
 # pygame setup
 pygame.init()
@@ -20,7 +23,6 @@ playing = True
 # initialize font
 fontSize = 25
 font = pygame.font.SysFont("lucidaconsole", fontSize)
-
 
 # set colors
 BLACK = (0, 0, 0)
@@ -44,7 +46,6 @@ def clearTerminal():
     for i in range(numLines):
         visibleText.pop(0)
         visibleText.append("".ljust(lineWidth))
-
 
 def writeAnim(text, speed):
     for character in text:
@@ -145,8 +146,6 @@ class Player:
 
 newenemy = Enemy(1)
 pc = Player()
-_index = 0
-subMenu = False
 
 def uiTop():
     printToTerminal("gold: " + str(money))
@@ -160,13 +159,13 @@ def uiTop():
     printToTerminal(setBonus())
     #printToTerminal("attack: {}  defense: {}  speed: {}".format(playerStatCalc(myItem)[0], playerStatCalc(myItem)[1], playerStatCalc(myItem)[2]))
     printToTerminal("---------------------------------------------")
+
 def uiBot(thisText = "> "):
     printToTerminal("---------------------------------------------")
     
     # idk why this isnt working; comments are the intentions. also the i is saying its not referenced but idk wky
     # for i in range((numLines) - len(visibleText)): ## for all of the lines that are not taken up by text
     #     visibleText.append("")                     ## put a blank line
-
 
 def mainmenuUI(currentPosition):
     printToTerminal("please make a selection")
@@ -219,11 +218,6 @@ while playing:
 
     screen.fill(BLACK)
 
-    clearTerminal()
-    uiTop()
-    mainmenuUI(currentPosition)
-    uiBot()
-    
     if mainMenu: 
         clearTerminal()
         nav=0
@@ -318,31 +312,32 @@ while playing:
                     nav = currentPosition + 1
 
         if (nav == 4 or nav == 5 or nav == 6 or nav == 7 or nav == 8 or nav == 9) and (money -3 >= 0):
-            subMenu = True
             itemNumber = nav
-            nav = 0
+            nav = currentPosition = 0
+            subMenu = True
         
         if (nav == 1 or nav == 2 or nav == 3) and (money >= 1) and not subMenu:
             money -= 1
+            nav = currentPosition = 0
             shopItem1.roll(nav)
             shopItem2.roll(nav)
-            nav = 0
 
         if nav == 10 and not subMenu:
+            nav = currentPosition = 0
             shop = False
             mainMenu = True
 
         elif (nav == 100 )and (money >= 4):
             money -= 4
+            nav = currentPosition = 0
             shopItem1.roll(4)
             shopItem2.roll(4)
-            nav = 0 
 
         elif nav == 10:
+            nav = currentPosition = 0
             shop = False
             mainMenu = True
-            nav = 0
-            currentPosition = 0
+
         elif subMenu:
             
             _index = 0 #initialize local variable to pass to either of the items that is being asked about
@@ -439,6 +434,7 @@ while playing:
         '''
 
     elif battle:
+        escapeCost = 10
         clearTerminal()
         for event in events:
             if event.type == pygame.KEYDOWN:
@@ -456,28 +452,44 @@ while playing:
                     currentPosition = 1
         turns = 0
         clearing = 1 #this is the enemy level, but i realized it was going up one per location, so it also equals clearing
-        nav = 0
-        fighting = False
 
+        uiTop()
+        printToTerminal('{} attacks!!!!!'.format(newenemy.name))
+        printToTerminal("he has {} health, {} defense, {} gold!".format(newenemy.hp, newenemy.defense, newenemy.gold))
+        printToTerminal("attack this enemy?")
+        subMenuUI(currentPosition)
+        uiBot()
+        if nav == 1:
+            nav = currentPosition = 0
+            fighting = True
 
-        if nav == 1: #fight
+        elif nav == 2:
+            nav = currentPosition = 0
+            battle = False
+
+        elif fighting:
             uiTop()
-            printToTerminal('{} attacks!!!!!'.format(newenemy.name))
-            printToTerminal("he has {} health, {} defense, {} gold!".format(newenemy.hp, newenemy.defense, newenemy.gold))
-            battleDisp(currentPosition)
-            uiBot()             
-        elif nav == 2: 
-            uiTop
             newenemy.damage(pc.itemDamage)
             pc.damagePlayer(newenemy.att)
             printToTerminal("{}'s current health is {} with defense {}".format(newenemy.name, newenemy.hp, newenemy.defense))
-            loopDelay()
+            battleDisp(currentPosition)
             uiBot()
+            if nav == 1:
+                turns += 1
+                #loop
+                nav = currentPosition = 0
+                
+            elif nav == 2:
+                nav = currentPosition = 0
+                money = money - escapeCost
+                shop = True
+                fighting = False
+            if pc.playerHp <= 0:
+                uiTop()
+                printToTerminal("you died at clearing: " + str(clearing) + "and dropped your item!")
+                
 
-        elif nav == 2:
-            battle = False
-            shop = True
-            nav = currentPosition = 0
+
 
 
         '''
@@ -544,3 +556,4 @@ while playing:
 
     # flip() the display to put your work on screen
     pygame.display.flip()
+

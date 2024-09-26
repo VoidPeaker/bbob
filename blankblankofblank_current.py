@@ -150,7 +150,7 @@ pc = Player()
 def uiTop():
     printToTerminal("gold: " + str(money))
     printToTerminal("nav:" + str(nav) + "currentPos:" + str(currentPosition))
-    #printToTerminal(str(_index))
+    printToTerminal(str(pc.playerHp))
     printToTerminal(myItem.toReadable())
     if battle:
         printToTerminal("clearing: " + str(clearing))
@@ -224,12 +224,12 @@ while playing:
         uiTop() #print the UI
         mainmenuUI(currentPosition)
         uiBot()
-
+                                                                                                                                                                                                                                                                 
         for event in events:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if (event.key == pygame.K_LEFT) or (event.key == pygame.K_UP):
                     currentPosition = (currentPosition - 1) % 5
-                elif event.key == pygame.K_RIGHT:
+                elif (event.key == pygame.K_RIGHT) or (event.key == pygame.K_DOWN):
                     currentPosition = (currentPosition + 1) % 5
                 elif (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
                     currentPosition = 0
@@ -253,7 +253,6 @@ while playing:
                     currentPosition = 99
                 if (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
                     nav = currentPosition + 1
-
 
         # if it's 1, 2, or 3, we move to a different screen
         if nav == 1:
@@ -308,7 +307,7 @@ while playing:
                     currentPosition = 8
                 elif (event.key == pygame.K_0) or (event.key == pygame.K_KP0):
                     currentPosition = 99
-                if (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
+                elif (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
                     nav = currentPosition + 1
 
         if (nav == 4 or nav == 5 or nav == 6 or nav == 7 or nav == 8 or nav == 9) and (money -3 >= 0):
@@ -442,11 +441,9 @@ while playing:
                     currentPosition = (currentPosition - 1) % 2
                 elif event.key == pygame.K_RIGHT:
                     currentPosition = (currentPosition + 1) % 2
-                if (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
+                elif (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
                     nav = currentPosition + 1
-        for event in events:
-            if event.type == pygame.KEYDOWN:
-                if (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
+                elif (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
                     currentPosition = 0
                 elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
                     currentPosition = 1
@@ -466,27 +463,29 @@ while playing:
         elif nav == 2:
             nav = currentPosition = 0
             battle = False
+            shop = True
 
         elif fighting:
+            clearTerminal()
             uiTop()
-            newenemy.damage(pc.itemDamage)
-            pc.damagePlayer(newenemy.att)
             printToTerminal("{}'s current health is {} with defense {}".format(newenemy.name, newenemy.hp, newenemy.defense))
             battleDisp(currentPosition)
             uiBot()
-            if nav == 1:
+            if nav == 1: #fight
                 turns += 1
-                #loop
+                newenemy.damage(pc.itemDamage)
+                pc.damagePlayer(newenemy.att)
                 nav = currentPosition = 0
                 
-            elif nav == 2:
+            elif nav == 2: #run
                 nav = currentPosition = 0
                 money = money - escapeCost
                 shop = True
                 fighting = False
-            if pc.playerHp <= 0:
-                uiTop()
-                printToTerminal("you died at clearing: " + str(clearing) + "and dropped your item!")
+            # elif pc.playerHp <= 0:
+            #     uiTop()
+            #     printToTerminal("you died at clearing: " + str(clearing) + "and dropped your item!")
+            #     fighting = False
                 
 
 

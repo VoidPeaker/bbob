@@ -1,4 +1,4 @@
-from convertexcel import Item, myItem 
+from itemDeclaration import Item, myItem 
 
 def setBonus(self = myItem):
     output = "{} {} {}".format(self.getInfo('adj', "set"), self.getInfo('noun', "set"), self.getInfo('of', "set"))

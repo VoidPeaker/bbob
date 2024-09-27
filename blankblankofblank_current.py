@@ -1,6 +1,6 @@
 import random, math, pygame, time, sys
-from convertexcel import *
-from counting_ import *
+from itemDeclaration import *
+from setBonuses import *
 
 mainMenu = True
 shop = False
@@ -149,7 +149,8 @@ pc = Player()
 
 def uiTop():
     printToTerminal("gold: " + str(money))
-    printToTerminal("nav:" + str(nav) + "currentPos:" + str(currentPosition))
+    #printToTerminal("nav:" + str(nav) + "currentPos:" + str(currentPosition))
+    printToTerminal("")
     printToTerminal(str(pc.playerHp))
     printToTerminal(myItem.toReadable())
     if battle:
@@ -317,9 +318,9 @@ while playing:
         
         if (nav == 1 or nav == 2 or nav == 3) and (money >= 1) and not subMenu:
             money -= 1
-            nav = currentPosition = 0
             shopItem1.roll(nav)
             shopItem2.roll(nav)
+            nav = currentPosition = 0
 
         if nav == 10 and not subMenu:
             nav = currentPosition = 0
@@ -328,9 +329,9 @@ while playing:
 
         elif (nav == 100 )and (money >= 4):
             money -= 4
-            nav = currentPosition = 0
             shopItem1.roll(4)
             shopItem2.roll(4)
+            nav = currentPosition = 0
 
         elif nav == 10:
             nav = currentPosition = 0
@@ -393,45 +394,6 @@ while playing:
                     subMenu = False
                     shop = True
 
-
-        '''
-        if (nav == 7 or nav == 8 or nav == 9) and (money >= 3): #money-3 == 0?
-            money -= 3
-            clearTerminal()
-            shopItemConfirm(nav = nav)
-            #Replace(myItem.getList(), nav-1,shopItem1.getList()[nav-1] )
-            #shopItem1.roll(nav)
-            nav = 0
-
-        elif (nav == 4) and (money >= 1):
-            money -= 1
-            clearTerminal()
-            shopItem1.roll(nav)
-            nav = 0
-
-        elif (nav == 1 or nav == 2 or nav == 3 or nav == 4) and (money - 3 <= 0):
-            clearTerminal()
-            infoText = "not enough money!\n enter to continue"
-            input()
-
-        elif nav == 5:
-            mainMenu = True
-            shop = False
-            currentPosition = 0
-            nav = 0
-
-        elif nav == 6:
-            clearTerminal()
-            with open("user saved.txt", "a+") as file:
-                file.write("\n" + myItem.toReadable())
-            #savedItems.write("{}".format(myItem.toReadable()))
-            infoText = "Saved!"
-            uiTop()
-            shopDisp(myItem.getList())
-            uiBot(infoText)
-            input()
-        '''
-
     elif battle:
         escapeCost = 10
         clearTerminal()
@@ -478,10 +440,11 @@ while playing:
                 nav = currentPosition = 0
                 
             elif nav == 2: #run
-                nav = currentPosition = 0
+
                 money = money - escapeCost
                 shop = True
                 fighting = False
+                nav = currentPosition = 0
             # elif pc.playerHp <= 0:
             #     uiTop()
             #     printToTerminal("you died at clearing: " + str(clearing) + "and dropped your item!")

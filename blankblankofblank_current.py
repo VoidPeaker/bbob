@@ -18,6 +18,8 @@ clearing = 1 #this is the enemy level, but i realized it was going up one per lo
 escapeCost = 1
 dead = False
 fullHealth = 0
+speed = 1/25
+hasNewEnemy = False
 
 # pygame setup
 pygame.init()
@@ -146,16 +148,17 @@ class Player:
 
 
     def damagePlayer(self, enemyDamage):
-        print("yeowch")
         if enemyDamage - self.playerDefense > 0:
             self.playerHp = self.playerHp - (enemyDamage - self.playerDefense)
+        if self.playerHp < 0:
+            self.playerHp = 0 
 
 newenemy = Enemy(1)
 pc = Player()
 
 def uiTop():
     printToTerminal("gold: " + str(money))
-    #printToTerminal("nav:" + str(nav) + "currentPos:" + str(currentPosition))
+    printToTerminal("nav:" + str(nav) + "currentPos:" + str(currentPosition))
     printToTerminal("")
     printToTerminal("hp: " + str(pc.playerHp))
     printToTerminal(myItem.toReadable())
@@ -212,14 +215,14 @@ def subMenuUI(currentPosition):
         printToTerminal(' yes '.ljust(w) + '[no]')
 
 def battleDisp(currentPosition):
-    w = 40
+    w = 20
     printToTerminal("what do you do?")
     if (currentPosition == 0):
-        printToTerminal('[1] fight!'.ljust(w) + ' 2  shop!'.ljust(w))
+        printToTerminal('[fight!]'.ljust(w) + ' run! {}g '.format(escapeCost))
     elif (currentPosition == 1):
-        printToTerminal(' 1  fight!'.ljust(w) + '[2] shop!'.ljust(w))
+        printToTerminal(' fight! '.ljust(w) + '[run! {}g]'.format(escapeCost))
     else:
-        printToTerminal(' 1  fight!'.ljust(w) + '[2] shop!'.ljust(w))
+        printToTerminal(' fight! '.ljust(w) + '[run! {}g]'.format(escapeCost))
 
 #main playing loop
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -274,16 +277,16 @@ while playing:
         if nav == 1:
             mainMenu = False
             shop = True
-            nav = 0
+            nav = currentPosition = 0
         elif nav == 2:
             mainMenu = False
             battle = True
             newenemy = Enemy(clearing)
-            nav = 0
+            nav = currentPosition = 0
         elif nav == 3:
-            out = True
             mainMenu = False
-            nav = 0
+            out = True
+            nav = currentPosition = 0
 
     elif shop:
         menuOptions = 10
@@ -370,44 +373,50 @@ while playing:
                 clearTerminal()
                 uiTop()
                 printToTerminal(shopItem1.getList()[_index])
-                printToTerminal("")
+                printToTerminal(" ")
                 printToTerminal("attack: {}  defense: {}  speed: {}".format((shopItem1.getInfo(type, "att")),
                                                                             (shopItem1.getInfo(type, "def")), 
                                                                             (shopItem1.getInfo(type, "speed"))))
                 printToTerminal("set(s): {}".format(shopItem1.getInfo(type, "set")))
-                printToTerminal("")
+                printToTerminal(" ")
                 printToTerminal("do you want to replace?")
                 subMenuUI(currentPosition)
+                uiBot()
                 if nav == 1: #yes
                     money -= 4
                     Replace(myItem.getList(), _index, shopItem1.getList()[_index])
                     subMenu = False
                     shop = True
+                    nav = currentPosition = 0
                 elif nav == 2: #no
                     subMenu = False
                     shop = True
+                    nav = currentPosition = 0
 
 
             elif itemNumber in range(4,7):
                 clearTerminal()
                 uiTop()
                 printToTerminal(shopItem2.getList()[_index])
-                printToTerminal("")
+                printToTerminal(" ")
                 printToTerminal("attack: {}  defense: {}  speed: {}".format((shopItem2.getInfo(type, "att")),
                                                                             (shopItem2.getInfo(type, "def")), 
                                                                             (shopItem2.getInfo(type, "speed"))))
                 printToTerminal("set(s): {}".format(shopItem2.getInfo(type, "set")))
-                printToTerminal("")
+                printToTerminal(" ")
                 printToTerminal("do you want to replace?")
                 subMenuUI(currentPosition)
+                uiBot()
                 if nav == 1: #yes
                     money -= 4
                     Replace(myItem.getList(), _index, shopItem2.getList()[_index])
                     subMenu = False
                     shop = True
+                    nav = currentPosition = 0
                 elif nav == 2: #no
                     subMenu = False
                     shop = True
+                    nav = currentPosition = 0
 
     elif battle:
         for event in events:
@@ -433,6 +442,7 @@ while playing:
             printToTerminal("attack this enemy?")
             subMenuUI(currentPosition)
             uiBot()
+            
             if nav == 1:
                 nav = currentPosition = 0
                 fighting = True
@@ -443,96 +453,86 @@ while playing:
                 shop = True
 
         elif fighting:
-            clearTerminal()
-            uiTop()
-            printToTerminal("{}'s current health is {} with defense {}".format(newenemy.name, newenemy.hp, newenemy.defense))
-            battleDisp(currentPosition)
-            uiBot()
-            if nav == 1 and not dead: #fight current enemy
-                turns += 1
-                newenemy.damage(pc.itemDamage)
-                pc.damagePlayer(newenemy.att)
-                nav = currentPosition = 0
-            elif nav == 2 and not dead: #run away
-                money = money - escapeCost
-                shop = True
-                fighting = False
-                nav = currentPosition = 0
-            if dead:
-                uiTop()
-                printToTerminal("you died at clearing: " + str(clearing) + "and dropped your item!")
-                fighting = False
-                nav = currentPosition = 0
-            elif newenemy.hp <= 0:
+            if hasNewEnemy:
                 clearTerminal()
                 uiTop()
-                printToTerminal("ya win")
-                clearing += 1
-                turns = 0
-                money = money + newenemy.gold
-                newenemy = Enemy(clearing)
-                printToTerminal("UH OH! here comes {}".format(newenemy.name))
-                printToTerminal("attack this enemy?")
+                printToTerminal("you win!")
+                printToTerminal("UH OH! you see an enemy! {}".format(newenemy.name))
+                printToTerminal("continue to next clearing?")
                 subMenuUI(currentPosition)
                 uiBot()
-                if nav == 1:
+                if nav == 1:#yes continue
                     nav = currentPosition = 0
-                    fighting = True
+                    hasNewEnemy = False
 
-                elif nav == 2:
+                elif nav == 2: #no
                     nav = currentPosition = 0
                     fighting = False
                     shop = True
-
-
-
-
-        '''
-        #nav = int(input())
-        if nav == 1:
-            attack = True
-            printToTerminal('{} attacks!!!!!! he has {} health and {} defense!\nenter to attack!'.format(newenemy.name, newenemy.hp, newenemy.defense))
-        elif nav == 2:
-            battle = False
-            shop = True
-        elif attack:
-            if newenemy.hp - pc.itemDamage <= 0:
-                clearTerminal()
-                printToTerminal("enemies beaten: {}\nitem attack: {}\ncurrent health: {}".format(combo, pc.itemDamage, pc.playerHp)) 
-                printToTerminal("you won!")
-                input()
-                newenemy = Enemy(i)
-                printToTerminal('uh oh!\n{} attacks!!!!!! he has {} health and {} defense!\nenter to attack!'.format(newenemy.name, newenemy.hp, newenemy.defense))
-                combo +=1
-                i += 1
-                pc.itemDamage += 1
-                input()
-            
-            elif pc.playerHp - newenemy.att <= 0:
-                clearTerminal()
-                printToTerminal('you died!')
-                input()
-                battle = False
-                Shop = True
-
-            
             else:
                 clearTerminal()
-                printToTerminal("enemies beaten: {}\nitem attack: {}\ncurrent health: {}".format(combo, pc.itemDamage, pc.playerHp))
-                newenemy.damage(pc.itemDamage)
-                pc.damagePlayer(newenemy.att)
+                uiTop()
                 printToTerminal("{}'s current health is {} with defense {}".format(newenemy.name, newenemy.hp, newenemy.defense))
-                input()
-                '''      
+                battleDisp(currentPosition)
+                uiBot()
+                if nav == 1 and not dead: #fight current enemy
+                    turns += 1
+                    escapeCost = turns + math.floor(clearing*(1/3))
+                    newenemy.damage(pc.itemDamage)
+                    pc.damagePlayer(newenemy.att)
+                    nav = currentPosition = 0
+                elif (nav == 2) and (not dead) and (money - escapeCost > 0): #run away
+                    money = money - escapeCost
+                    shopItem1.roll(4)
+                    shopItem2.roll(4)
+                    fighting = False
+                    shop = True
+                    nav = currentPosition = 0
+                if dead:
+                    uiTop()
+                    printToTerminal("you died at clearing: " + str(clearing) + " and dropped your item!")
+                    printToTerminal(" ")
+                    printToTerminal("[Menu]")
+                    uiBot()
+                    if nav == 1:
+                        fighting = False
+                        mainMenu = True
+                        shopItem1.roll(4)
+                        shopItem2.roll(4)
+                        nav = currentPosition = 0
+                        clearing = 0
+                elif newenemy.hp <= 0:
+                    nav = 0
+                    clearing += 1
+                    turns = 0
+                    money = money + newenemy.gold
+                    newenemy = Enemy(clearing)
+                    hasNewEnemy = True
+
+
+    
     elif out:
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    currentPosition = (currentPosition - 1) % 2
+                elif event.key == pygame.K_RIGHT:
+                    currentPosition = (currentPosition + 1) % 2
+                elif (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
+                    nav = currentPosition + 1
+                elif (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
+                    currentPosition = 0
+                elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
+                    currentPosition = 1
         clearTerminal()
         uiTop()
         printToTerminal('are you sure?')
+        subMenuUI(currentPosition)
         uiBot()
-        #nav = int(input())
+
         if nav == 1:
             playing = False
-        elif nav == 0:
+        elif nav == 2:
             mainMenu = True
             out = False
 
@@ -551,4 +551,6 @@ while playing:
 
     # flip() the display to put your work on screen
     pygame.display.flip()
+
+    time.sleep(speed)
 

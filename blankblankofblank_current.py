@@ -13,6 +13,11 @@ clearing = 0
 fighting = False
 _index = 0
 subMenu = False
+turns = 0
+clearing = 1 #this is the enemy level, but i realized it was going up one per location, so it also equals clearing
+escapeCost = 1
+dead = False
+fullHealth = 0
 
 # pygame setup
 pygame.init()
@@ -141,6 +146,7 @@ class Player:
 
 
     def damagePlayer(self, enemyDamage):
+        print("yeowch")
         if enemyDamage - self.playerDefense > 0:
             self.playerHp = self.playerHp - (enemyDamage - self.playerDefense)
 
@@ -151,7 +157,7 @@ def uiTop():
     printToTerminal("gold: " + str(money))
     #printToTerminal("nav:" + str(nav) + "currentPos:" + str(currentPosition))
     printToTerminal("")
-    printToTerminal(str(pc.playerHp))
+    printToTerminal("hp: " + str(pc.playerHp))
     printToTerminal(myItem.toReadable())
     if battle:
         printToTerminal("clearing: " + str(clearing))
@@ -395,37 +401,37 @@ while playing:
                     shop = True
 
     elif battle:
-        escapeCost = 10
-        clearTerminal()
         for event in events:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    currentPosition = (currentPosition - 1) % 2
-                elif event.key == pygame.K_RIGHT:
-                    currentPosition = (currentPosition + 1) % 2
-                elif (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
-                    nav = currentPosition + 1
-                elif (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
-                    currentPosition = 0
-                elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
-                    currentPosition = 1
-        turns = 0
-        clearing = 1 #this is the enemy level, but i realized it was going up one per location, so it also equals clearing
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        currentPosition = (currentPosition - 1) % 2
+                    elif event.key == pygame.K_RIGHT:
+                        currentPosition = (currentPosition + 1) % 2
+                    elif (event.key == pygame.K_RETURN) or (event.key == pygame.K_KP_ENTER):
+                        nav = currentPosition + 1
+                    elif (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
+                        currentPosition = 0
+                    elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
+                        currentPosition = 1
+        if pc.playerHp <= 0:
+            dead = True
+        
+        if not fighting:
+            clearTerminal()
+            uiTop()
+            printToTerminal('{} attacks!!!!!'.format(newenemy.name))
+            printToTerminal("he has {} health, {} defense, {} gold!".format(newenemy.hp, newenemy.defense, newenemy.gold))
+            printToTerminal("attack this enemy?")
+            subMenuUI(currentPosition)
+            uiBot()
+            if nav == 1:
+                nav = currentPosition = 0
+                fighting = True
 
-        uiTop()
-        printToTerminal('{} attacks!!!!!'.format(newenemy.name))
-        printToTerminal("he has {} health, {} defense, {} gold!".format(newenemy.hp, newenemy.defense, newenemy.gold))
-        printToTerminal("attack this enemy?")
-        subMenuUI(currentPosition)
-        uiBot()
-        if nav == 1:
-            nav = currentPosition = 0
-            fighting = True
-
-        elif nav == 2:
-            nav = currentPosition = 0
-            battle = False
-            shop = True
+            elif nav == 2:
+                nav = currentPosition = 0
+                battle = False
+                shop = True
 
         elif fighting:
             clearTerminal()
@@ -433,23 +439,41 @@ while playing:
             printToTerminal("{}'s current health is {} with defense {}".format(newenemy.name, newenemy.hp, newenemy.defense))
             battleDisp(currentPosition)
             uiBot()
-            if nav == 1: #fight
+            if nav == 1 and not dead: #fight current enemy
                 turns += 1
                 newenemy.damage(pc.itemDamage)
                 pc.damagePlayer(newenemy.att)
                 nav = currentPosition = 0
-                
-            elif nav == 2: #run
-
+            elif nav == 2 and not dead: #run away
                 money = money - escapeCost
                 shop = True
                 fighting = False
                 nav = currentPosition = 0
-            # elif pc.playerHp <= 0:
-            #     uiTop()
-            #     printToTerminal("you died at clearing: " + str(clearing) + "and dropped your item!")
-            #     fighting = False
-                
+            if dead:
+                uiTop()
+                printToTerminal("you died at clearing: " + str(clearing) + "and dropped your item!")
+                fighting = False
+                nav = currentPosition = 0
+            elif newenemy.hp <= 0:
+                clearTerminal()
+                uiTop()
+                printToTerminal("ya win")
+                clearing += 1
+                turns = 0
+                money = money + newenemy.gold
+                newenemy = Enemy(clearing)
+                printToTerminal("UH OH! here comes {}".format(newenemy.name))
+                printToTerminal("attack this enemy?")
+                subMenuUI(currentPosition)
+                uiBot()
+                if nav == 1:
+                    nav = currentPosition = 0
+                    fighting = True
+
+                elif nav == 2:
+                    nav = currentPosition = 0
+                    fighting = False
+                    shop = True
 
 
 

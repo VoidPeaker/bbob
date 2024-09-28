@@ -166,13 +166,22 @@ def uiTop():
     printToTerminal(setBonus())
     #printToTerminal("attack: {}  defense: {}  speed: {}".format(playerStatCalc(myItem)[0], playerStatCalc(myItem)[1], playerStatCalc(myItem)[2]))
     printToTerminal("---------------------------------------------")
+    
 
 def uiBot(thisText = "> "):
     printToTerminal("---------------------------------------------")
     
-    # idk why this isnt working; comments are the intentions. also the i is saying its not referenced but idk wky
-    # for i in range((numLines) - len(visibleText)): ## for all of the lines that are not taken up by text
-    #     visibleText.append("")                     ## put a blank line
+    emptyLines = 0
+    i = 0
+    while i < len(visibleText):
+        if visibleText[i] == "".ljust(lineWidth):
+            visibleText.pop(i)
+            emptyLines = emptyLines + 1
+        else: i = i + 1
+    for i in range(emptyLines):
+        visibleText.append("".ljust(lineWidth))
+    
+
 
 def mainmenuUI(currentPosition):
     printToTerminal("please make a selection")

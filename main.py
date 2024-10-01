@@ -1,4 +1,4 @@
-import random, math, pygame, time, sys
+import random, math, pygame, time
 from itemDeclaration import *
 from setBonuses import *
 

@@ -17,12 +17,108 @@ def setBonus(self = myItem):
 
     if numInSet == 1:
         return "no set bonus"
-    elif numInSet == 2:
-        if set == "bad" or "abstract" or "wizard" or "machine" or "baseball" or "emotion" or "gun" or "throw" or "knight" or "classic" or "lgbt" or "cute" or "patriotic" or "gold" or "audio" or "basic" or "fancy":
-            return set + " 2"
-    elif numInSet == 3:
-        if set == "bad" or "abstract" or "wizard" or "machine" or "baseball" or "emotion" or "gun" or "throw" or "knight" or "classic" or "lgbt" or "cute" or "patriotic" or "gold" or "audio" or "basic" or "fancy":
-            return set + " 3"
+
+
+    if set == "bad":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "abstract":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "wizard":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "machine":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "baseball":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "emotion":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "gun":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "throw":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "knight":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "classic":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "lgbt":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "cute":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "patriotic":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "gold":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "audio":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "basic":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "fancy":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "BASIC":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "jazz":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
+    elif set == "clown":
+        if numInSet == 2:
+            pass
+        elif numInSet ==3:
+            pass
 
 
 

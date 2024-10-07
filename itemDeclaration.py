@@ -4,6 +4,13 @@ import json, random
 exItem = []
 resourcesPath = "../bbob/resources/"
 
+def randomize(win = 0):
+    result = random.randrange(0,100)
+    if result >= win:
+        return True
+    if result <= win:
+        return False
+
 def Replace(list, i, string):
     list.pop(i)
     list.insert(i, "{}".format(string))
@@ -164,3 +171,36 @@ def playerStatCalc(item): #is list rn
     return stats
 
 #print(playerStatCalc(myItem))
+
+def clearingCalc(clearing):
+    roll = [False, False, False, False, True, False, False, True]
+    #
+    sanitize = clearing % 8
+    print(clearing)
+    if roll[sanitize] == True:
+        clearingType = "store"
+    elif roll[sanitize] == False:
+        clearingType = "battle"
+    if clearing == 1:
+        print("the first clearing")
+    elif 0 == clearing % 10:
+        print("-----------boss clearing!")
+    elif 1 == clearing % 10:
+        random.shuffle(roll)
+    elif clearingType == "store":
+        print("you're in the store")
+        print("store code")
+    elif clearingType == "battle":
+        print("battle! battle code!")
+
+
+    # 1 is starting clearing, the first one is always an enemy
+    # 2 enemy, initialize enemy from class, do damage, win
+    # 3 shop, a limited form of the other shop
+    # 4 boss, extra strong enemy. happens at clearing % 10 (?)
+    # when newclearing is called clearing ++ if not == 1 or % 10, roll for 1 or 2, then put that item from this class to screen
+# x = 0
+# while True:
+#     x += 1
+#     clearingCalc(x)
+#     input()

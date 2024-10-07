@@ -224,6 +224,8 @@ def battleDisp(currentPosition):
     else:
         printToTerminal(' fight! '.ljust(w) + '[run! {}g]'.format(escapeCost))
 
+
+
 #main playing loop
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -247,9 +249,9 @@ while playing:
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if (event.key == pygame.K_LEFT) or (event.key == pygame.K_UP):
-                    currentPosition = (currentPosition - 1) % 5
+                    currentPosition = (currentPosition - 1) % 3
                 elif (event.key == pygame.K_RIGHT) or (event.key == pygame.K_DOWN):
-                    currentPosition = (currentPosition + 1) % 5
+                    currentPosition = (currentPosition + 1) % 3
                 elif (event.key == pygame.K_1) or (event.key == pygame.K_KP1):
                     currentPosition = 0
                 elif (event.key == pygame.K_2) or (event.key == pygame.K_KP2):
